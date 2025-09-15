@@ -1,0 +1,218 @@
+Nandish Jha NAJ474 11282001
+Aakash Jana AAJ284 11297343
+
+=======================
+Programming Style Guide
+=======================
+
+Overview:
+---------
+This style guide describes the conventions we will follow for all parts of the
+assignment. The goal is to ensure consistency, readability, and maintainability
+in our code across different programming languages and file types.
+
+1. File Organization & Directory Structure
+------------------------------------------
+- Single unified header file (header.h) contains all declarations and includes.
+- All source files (.c) include only header.h for consistency and simplicity.
+- Project organized in phase-based directories (a1-phase1/, a1-phase2/).
+- Every file begins with a comment header that includes:
+  * Name of the 2 team members
+  * Their NSID  
+  * Their Student Number
+- Functions declared in header.h and defined in respective source files.
+- Related functionality grouped in separate modules (e.g., list_adders.c,
+    list_movers.c).
+
+2. Naming Conventions
+---------------------
+- Variables use "snake_case".
+- Functions use "PascalCase".
+- Constants and macros use "ALL_CAPS".
+- Structs and typedefs use "camelCase" with descriptive names.
+- File names are descriptive and consistent with content.
+- Single unified header file: `header.h` for all declarations.
+
+3. Indentation and Spacing
+--------------------------
+- Indentation: 4 spaces consistently (no tabs).
+- Opening braces on same line as statement for consistency.
+- Closing braces aligned with the statement that opened them.
+- One blank line between functions for clarity.
+- No trailing whitespace at end of lines.
+- Maximum line length: 80 characters (enforced).
+
+Example formatting:
+    if (condition) 
+    {
+        /* Action */
+        printf("Message\n");
+    }
+    else 
+    {
+        /* Alternative action */
+        handle_error();
+    }
+
+4. Comments & Documentation
+---------------------------
+- All comments use /*...*/ format for consistency.
+- Function headers describe purpose, parameters, and return values.
+- Complex logic sections include explanatory comments.
+- No obvious comments (e.g., /* increment i */ i++).
+- Design documents accompany major components.
+
+5. Error Handling & Memory Management
+-------------------------------------
+- ALL system call return values checked (malloc, calloc, CreateThread, etc.).
+- Informative error messages printed to stderr when appropriate.
+- Memory allocated is properly freed to prevent leaks.
+- NULL parameter checking in all public functions.
+- Error conditions return appropriate failure codes.
+- Graceful cleanup on error paths.
+
+Example error handling:
+    args = (struct thread_args*)calloc(numThreads, sizeof(struct thread_args));
+    if (args == NULL) {
+        printf("Error: Memory allocation failed\n");
+        return 1;
+    }
+
+6. Bash Scripting Standards
+----------------------------
+- Shebang line: #!/bin/bash at file start.
+- Use 'set -e' for error handling.
+- Variables in ALL_CAPS for environment/global scope.
+- Local variables in lowercase.
+- Quote variable expansions: "$variable" not $variable.
+- Input validation for all user parameters.
+- Meaningful error messages with usage information.
+- Executable permissions set correctly (chmod +x).
+
+Example bash structure:
+    #!/bin/bash
+    set -e
+    
+    if [ $# -ne 1 ]; then
+        echo "Usage: $0 <argument>" >&2
+        exit 1
+    fi
+
+7. Header File Standards
+------------------------
+- Single unified header file (header.h) contains all project declarations.
+- Include guards (#ifndef/#define/#endif) protect against multiple inclusion.
+- All system includes centralized in header.h (stdio.h, stdlib.h, etc.).
+- Forward declarations for opaque types (e.g., typedef struct LIST LIST;).
+- Function prototypes with complete parameter names for clarity.
+- Type definitions clearly documented and grouped logically.
+- All source files include only: #include <header.h>
+
+Example header structure:
+    #ifndef HEADER_H
+    #define HEADER_H
+    
+    /* System includes */
+    #include <stdio.h>
+    #include <stdlib.h>
+    
+    /* Type definitions */
+    typedef struct LIST LIST;
+    typedef void (*listItemFreeFn)(void *item);
+    
+    /* Function prototypes */
+    LIST *ListCreate(void);
+    int   ListCount(LIST *list);
+    int   Square(int N);
+    
+    #endif
+
+8. Compilation Standards & Flags
+---------------------------------
+- Compiler: gcc with strict flags for quality assurance.
+- Required flags: -std=gnu90 -Wall -pedantic -g.
+- OS-specific conditional compilation when needed.
+- Zero warnings policy (warnings treated as errors).
+- Separate object files for modular compilation.
+- Static library creation for reusable components.
+- Single header inclusion simplifies dependency management.
+
+Makefile variables:
+    CC = gcc
+    CPPFLAGS = -c -g -std=gnu90 -Wall -pedantic
+    LIBS = -luser32 -lkernel32  # Windows-specific
+    INCLUDE = -I.
+
+9. Git Workflow & Version Control
+----------------------------------
+- Frequent commits with meaningful messages.
+- Descriptive commit messages (not "update" or "fix").
+- Branch strategy: master for stable, local branches for development.
+- Fetch and pull before starting new work.
+- Standard workflow:
+  * fetch-pull (master) → switch (local-1) → merge master → work
+  * add-commit (local-1) → switch (master) → merge local-1 → test → push
+
+10. File Permissions & Security
+-------------------------------
+- Executable files have appropriate permissions (chmod +x).
+- Source files readable by group/owner only as needed.
+- No sensitive information in version control.
+- Script files validated for proper execution permissions.
+- Makefile targets handle permission requirements.
+
+11. Function Design Principles
+------------------------------
+- Single responsibility: each function does one thing well.
+- Keep functions short and focused (ideally < 50 lines).
+- Minimize global variables (use parameters instead).
+- Consistent return value conventions across module.
+- Parameter validation at function entry points.
+- Clear separation between public and private functions.
+
+12. Whitespace Handling
+-----------------------
+- Consistent spacing around operators: a + b not a+b.
+- Space after keywords: if (condition) not if(condition).
+- No spaces inside parentheses: func(param) not func( param ).
+- Consistent alignment of related declarations.
+- Blank lines to separate logical sections within functions.
+
+13. Platform-Specific Code
+-------------------------
+- Use conditional compilation to handle platform-specific code.
+  Example:
+    #ifdef _WIN32
+        // Windows-specific code
+    #else
+        // Linux-specific code
+    #endif
+- Ensure platform-specific headers are included only when necessary.
+- Document platform-specific behavior clearly in comments.
+
+14. Thread and Process Management
+---------------------------------
+- Always clean up resources (e.g., CloseHandle for threads in Windows).
+- Use global flags or signals for thread/process termination.
+- Avoid race conditions by ensuring thread safety (e.g., using mutexes).
+- Log key events in multi-threaded/multi-process programs for debugging.
+
+15. Testing and Debugging Practices
+------------------------------------
+- Log key events and errors to help with debugging.
+- Test multi-threaded/multi-process programs under various conditions:
+  * Different numbers of threads/processes.
+  * Edge cases (e.g., zero or negative inputs).
+- Include meaningful context in all `printf` statements for debugging.
+
+End of Style Guide
+------------------
+This document applies to all phases of the assignment and covers C source files,
+header files, bash scripts, Makefiles, documentation files, and directory
+structure organization.
+
+End of Updates
+--------------
+These updates ensure the style guide aligns with the practices observed in the
+phase 2 directory and provides additional clarity for platform-specific code,
+thread/process management, and debugging.
