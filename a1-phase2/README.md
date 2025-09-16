@@ -1,0 +1,1 @@
+File with instructions and commonly agreed rules on this project.

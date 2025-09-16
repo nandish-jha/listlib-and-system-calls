@@ -1,0 +1,81 @@
+Nandish Jha NAJ474 11282001
+Aakash Jana AAJ284 11297343
+
+=======================
+Part A Test Plan
+=======================
+
+Overview:
+---------
+This test plan outlines the testing strategy for Part A, which includes
+multi-threaded and multi-process implementations for computing the square of
+numbers using a recursive algorithm. The plan covers Parts A.1, A.2, A.3, and
+A.4.
+
+***
+    NOTE: Only part A1 will be tested fully for now, as the other parts,
+       are only skeleton codes and do not actually take input stimulus.
+       Using "sample_input.txt as the test input stimulus for part A1.
+
+Test Cases:
+-----------
+1. **Part A.1 (Windows Threads)**:
+   - Test Case 1.1: Create 4 threads, deadline 5s, compute squares up to 10.
+   - Test Case 1.2: Create 2 threads, deadline 3s, compute squares up to 20.
+   - Test Case 1.3: Create 8 threads, deadline 10s, compute squares up to 50.
+   - Expected Results:
+     - Threads terminate gracefully after the deadline.
+     - Each thread prints elapsed time and invocation count.
+
+2. **Part A.2 (UBC Pthreads)**:
+   - Test Case 2.1: Create 3 threads, deadline 4s, compute squares up to 15.
+   - Test Case 2.2: Create 5 threads, deadline 6s, compute squares up to 25.
+   - Test Case 2.3: Create 1 thread, deadline 2s, compute squares up to 30.
+   - Expected Results:
+     - Threads terminate using `Kill()` if the deadline is reached.
+     - Parent prints statistics for unfinished threads.
+
+3. **Part A.3 (POSIX Threads)**:
+   - Test Case 3.1: Create 2 threads, deadline 3s, compute squares up to 10.
+   - Test Case 3.2: Create 6 threads, deadline 8s, compute squares up to 40.
+   - Test Case 3.3: Create 4 threads, deadline 5s, compute squares up to 20.
+   - Expected Results:
+     - Threads terminate gracefully.
+     - Parent prints statistics for all threads.
+
+4. **Part A.4 (UNIX Processes)**:
+   - Test Case 4.1: Create 3 processes, deadline 4s, compute squares up to 10.
+   - Test Case 4.2: Create 5 processes, deadline 6s, compute squares up to 20.
+   - Test Case 4.3: Create 1 process, deadline 2s, compute squares up to 30.
+   - Expected Results:
+     - Processes terminate upon receiving `SIGALRM`.
+     - Each process prints elapsed time and invocation count.
+
+Testing Strategy:
+-----------------
+1. **Unit Testing**:
+   - Test the `Square()` function independently to ensure correctness.
+   - Verify that the recursive implementation handles edge cases (e.g., N=0).
+
+2. **Integration Testing**:
+   - Test thread/process creation and termination.
+   - Ensure proper synchronization and timing mechanisms.
+
+3. **System Testing**:
+   - Run the complete program for each subpart with various inputs.
+   - NOTE: Only part A1 will be tested fully for now, as the other parts,
+   are only skeleton codes and do not actually take input stimulus.
+
+4. **Error Handling**:
+   - Test invalid inputs (e.g., negative numbers, zero threads).
+   - Verify that the program handles errors gracefully (e.g., fork failure).
+
+Test Environment:
+-----------------
+- **Part A.1**: Windows 10, GCC with MinGW.
+- **Part A.2, A.3, A.4**: Linux (Ubuntu 20.04), GCC with `-std=gnu90`.
+
+Test Results:
+-------------
+- Record results in `PartA.testresults.txt`.
+- Include elapsed time, invocation counts, and any errors encountered.

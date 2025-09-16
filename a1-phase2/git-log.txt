@@ -1,0 +1,374 @@
+<<<<<<< HEAD
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+=======
+<<<<<<< HEAD
+commit a47562b59152c19263ad340cbe593349ad694d7b
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Wed Sep 24 10:33:24 2025 -0600
+
+    Added test results for part A1; minor modification in makefile.
+
+commit 61791aed03e2c1b89c24da44fa32eeb86a1c53f7
+Author: naj474 <naj474@usask.ca>
+Date:   Wed Sep 24 10:11:19 2025 -0600
+
+    Updated the part B bash script; added already existing design and tes plan text files.
+
+commit 7cb95eba5edb62aeb3548bb8e6dfd22b6c31da14
+Merge: 24f5c8d 84b958c
+Author: naj474 <naj474@usask.ca>
+Date:   Wed Sep 24 09:37:26 2025 -0600
+
+    Merge branch 'local-1'
+
+commit 84b958c2a33a35ce2660215ca771c8d583efa170
+Author: naj474 <naj474@usask.ca>
+Date:   Wed Sep 24 09:34:46 2025 -0600
+
+    Completed part A4 skeleton with SIGALRM and hard coded size for square.
+
+commit 24f5c8d5032f66f0e1641f41efb7da9e6ca166e9
+Merge: 9f3bc15 d2014ad
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Wed Sep 24 01:41:27 2025 -0600
+
+    Merge branch 'master' into local-1
+
+commit 9f3bc1586c6e68858141bfb011b61da2347bd8cd
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Wed Sep 24 01:40:55 2025 -0600
+
+    Minor cleanup of testing result and updated testplan and results
+
+commit d2014ad37ddd5c9da7b19f7ca40bbb628a3f4dfb
+Author: naj474 <naj474@usask.ca>
+Date:   Wed Sep 24 01:34:13 2025 -0600
+
+    Completed part A2 skeleton with hard coded size for square.
+
+commit d253cf40252d85adcac5128df15f41fb7116f50e
+Author: naj474 <naj474@usask.ca>
+Date:   Tue Sep 23 22:47:55 2025 -0600
+
+    Completed part A3 skeleton with hard coded size for square.
+
+commit 582de5077eef18e71eecbc0414c1eea56301178f
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Tue Sep 23 20:17:06 2025 -0600
+
+    Created an empty file for part A2.
+
+commit 769d96e0188a3791671580b50bc1c3161e0017c8
+Merge: 283752e 9ff38c0
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Tue Sep 23 20:05:36 2025 -0600
+
+    Merge branch 'master' of https://git.cs.usask.ca/cmpt332-fall2025/cmpt332-fall2025-group01/cmpt332-a1
+
+commit 283752e56c346ffdc7bf937c115493d1d5fbdbab
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Tue Sep 23 19:59:52 2025 -0600
+
+    Completed part A1 with timing claculations and reasonable verbosity.
+
+commit 67b318e49d9175f5b9c21455fe001ee4e4388c82
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Mon Sep 22 23:54:35 2025 -0600
+
+    Re-Part A1 - Implemented deadline from user argument and used the keep_running flag to finish the child threads if needed.
+
+commit a3ea293014417d3224cff09b79929e1654ebb8e7
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Mon Sep 22 23:15:22 2025 -0600
+
+    Re-Part A1 - Implemented number of threads from user arguments and creating that many threads.
+
+commit 9ff38c02e1db53453442aadeb0871f5317fba296
+Merge: 6dc3532 36bc73d
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Mon Sep 22 23:04:56 2025 -0600
+
+    Merge branch 'master' into local-1
+
+commit 6dc3532565d827c5d09c4cd8b3d6faba96ab1635
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Mon Sep 22 23:04:24 2025 -0600
+
+    Implemented ListAdd and more testcases
+    1) Made testcases self-checking
+    2) Found a new way of allocating new memory for testcases instead of creating too many new vars
+    3) Created partC.testresults.txt
+    4) Uploaded semi-final version of partC.testplan.txt
+
+commit d1a747de8be820f24d98f1e0f03777512b950269
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Mon Sep 22 22:06:04 2025 -0600
+
+    Re-Part A1 - Restarted implementing partA1; main creates a parent thread and the parent thread creates a child thread.
+
+commit 36bc73de328953e7ab64823442a8a8ae53fc0a66
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Mon Sep 22 20:00:56 2025 -0600
+
+    Fixed uasage of the time calculation parts.
+
+commit c0fb2fdbec08fa8f90bb2b941fab489cc4cd5d2c
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Mon Sep 22 14:15:46 2025 -0600
+
+    Major changes in Part A1 with square calls, per thread print info, thread termination logic.
+
+commit 8b9dcc0cfaa7009f7ac30bb7df2dcabc490b64b6
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Mon Sep 22 00:14:28 2025 -0600
+
+    Implemented ListConcat and tested multiple list creation and concat
+
+commit 978afbd136490da31a38f16c477fbc986fabca25
+Author: naj474 <naj474@usask.ca>
+Date:   Sun Sep 21 22:27:51 2025 -0600
+
+    Possible seg-fault whne using kill for specifically PID 0; implemented minor changes to accomodate PartA3 for compilation and building.
+
+commit 515d48dee15928224121fc4e1f0271e3e10d3d4d
+Author: naj474 <naj474@usask.ca>
+Date:   Sun Sep 21 16:23:35 2025 -0600
+
+    Updated the bash script to ask the user if they want to enter using keyboard or an input file.
+
+commit 4632721998b846e24cdc1a9781f3ff4f614f3c24
+Merge: dcb2acd 8d0d4fd
+Author: naj474 <naj474@usask.ca>
+Date:   Sun Sep 21 15:57:59 2025 -0600
+
+    Merge branch 'master' into local-1
+
+commit dcb2acdf76d8c6ae8d3be5a71b9f733f82398d69
+Author: naj474 <naj474@usask.ca>
+Date:   Sun Sep 21 15:56:32 2025 -0600
+
+    Fixed the possible race condition that was handling the invoke counter incorrectly. Used pthread_cancel instead of pthread_join.
+
+commit 8d0d4fd089faab79401eea76397b5efb86fa4d43
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Sun Sep 21 15:40:49 2025 -0600
+
+    Implemented and tested corollary NODE add functions
+
+commit f7e8ca3f6ee13d0ce6f34c05f9d820faffa3d1d5
+Author: naj474 <naj474@usask.ca>
+Date:   Sun Sep 21 11:15:32 2025 -0600
+
+    Fixed syntactical errors, alligned with the style guide.
+
+commit 55d86f56f481b57cd740dfe2520ab497239a7ffc
+Author: naj474 <naj474@usask.ca>
+Date:   Sun Sep 21 01:46:06 2025 -0600
+
+    Implemented code for the partA2, possible race condition (not fixed)
+
+commit 758d0c4f33c2d8094ce5e40c956d6f38d8578789
+Author: naj474 <naj474@usask.ca>
+Date:   Sat Sep 20 12:44:55 2025 -0600
+
+    Implemented skeleton for partA2, fully working.
+
+commit c97a472714c6deb233576b291824672eb4c25387
+Author: naj474 <naj474@usask.ca>
+Date:   Sat Sep 20 11:41:43 2025 -0600
+
+    Major change in Makefile to accomodate building of partA2 and minor changes in other files corresponding to building partA2.
+
+commit 46c1d35a8ac4bc7857e5e15ac35418bd9fe6f492
+Merge: 2def3b8 eeda5ea
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Sat Sep 20 00:30:58 2025 -0600
+
+    Merge branch 'master' into local-1
+
+commit 2def3b89d758dbbfd111d73e08dca14b79eb386f
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Sat Sep 20 00:30:17 2025 -0600
+
+    List Creation and Append implemented
+    1) Created a pool with a set max size for the List and Nodes
+    2) implemented the ListAppend and some helpers in list_movers.c
+
+commit eeda5ea1028f2e995d17877a29c29d2549a1c746
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Fri Sep 19 22:51:47 2025 -0600
+
+    Added elapsed time counter and square() invocation counter.
+
+commit 248ba68fd94eacffba2a1357365923a66e05cf03
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Fri Sep 19 20:40:01 2025 -0600
+
+    Minor changes to avoid gnu90 warnings
+
+commit 5555350f327bae5f2cfba886bf55f1584f9b8edc
+Author: naj474 <naj474@usask.ca>
+Date:   Fri Sep 19 19:46:57 2025 -0600
+
+    Minor change in the clean target of Makefile.
+
+commit c48adc9d8aa1417146e4d94e69eb8948d5d9d912
+Author: naj474 <naj474@usask.ca>
+Date:   Fri Sep 19 19:44:33 2025 -0600
+
+    Modified the Makefile to anotehr name for partC exe
+
+commit 4db2ad08bf7848cda6ef4133027f58f9196fe3f2
+Author: naj474 <naj474@usask.ca>
+Date:   Fri Sep 19 18:51:03 2025 -0600
+
+    Small edit to remove an exe in the clean target.
+
+commit f0baf85b01dbf6f59beeaa357de4c98aecf8e01a
+Author: naj474 <naj474@usask.ca>
+Date:   Fri Sep 19 18:49:50 2025 -0600
+
+    Modified multiple files for cleaner code and made provisions for partC.
+
+commit 39b6da57de4f7f9487857d09bfdde50344c9f97e
+Merge: e3b9153 e311082
+Author: naj474 <naj474@usask.ca>
+Date:   Fri Sep 19 10:26:23 2025 -0600
+
+    Merge remote-tracking branch 'origin/master'
+
+commit e3b9153e8b9a45d8e3bdd4abbc14c1d585b2e168
+Author: naj474 <naj474@usask.ca>
+Date:   Fri Sep 19 10:07:23 2025 -0600
+
+    Reorganize project structure: create phase-based directories
+    
+    - Moved README.md to a1-phase1/ directory
+    - Added CMPT332.a1-p1.grading.txt with assignment feedback
+    - Added git-log.txt with commit history
+    - Created a1-phase2/ directory with copy of all phase 1 files
+    - Organized files for better project structure with separate phase directories
+
+commit e31108221eeaa7ff0268825b6d97757cf7713f4a
+Author: naj474 <naj474@usask.ca>
+Date:   Mon Sep 15 11:53:43 2025 -0600
+
+    Adding git log before submitting tar file
+=======
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+>>>>>>> local-1
+>>>>>>> master
+
+commit 0e1c8f347d649055bb54ba714921d4aed6adc5c9
+Author: naj474 <naj474@usask.ca>
+Date:   Mon Sep 15 11:47:21 2025 -0600
+
+    Removed magic variables in the Makefile; Added print statements in the part C files; Successfully tested running as expected on desired systems.
+
+commit b2da62740cac9a2b28e0726af02e3bf344e0cb11
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Mon Sep 15 00:18:22 2025 -0600
+
+    Function stubs and header files made for Part C
+    1) added compilation recipe for Part C code compilation
+    2) function stubs are accompanied by hints provided in the assignment page
+    3) Makefile tested for no warnings/errors in wsl
+
+commit e681498b8742b12386df99da7b8323fee16354d7
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Sun Sep 14 22:02:20 2025 -0600
+
+    Created a working bash script file; made minor changes to Makefile to correspond with the bash script.
+
+commit 4ceab1c3f70b6514ce5480775f864a511c01ec13
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Sun Sep 14 17:32:43 2025 -0600
+
+    Updated the Makefile to detect OS type; thus, compiling specific targets depending on the OS type.
+
+commit 522e504c6e90164e5be4b51417fd2078fab0a7d4
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Sun Sep 14 17:11:16 2025 -0600
+
+    Created and wrote the design and style guide text files.
+
+commit b728f8d3daf0f23bc93f15b2e3d6be7cc176b6b1
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Sun Sep 14 16:09:07 2025 -0600
+
+    Minor aesthetic, syntactical changes.
+
+commit 379899556877848d4f6244fb84d828b22700328f
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Sun Sep 14 16:05:03 2025 -0600
+
+    Added Name Info at the top of the files; minor changes to makefile to be compatible with Windows commands; Design decision to include all the header calls in the partA1.h
+
+commit e0fcac20014cce18a0208fc33e78d9860bc117c7
+Author: Nandish Jha <naj474@usask.ca>
+Date:   Sun Sep 14 14:59:41 2025 -0600
+
+    Renamed the directory to the desired name.
+
+commit 911874166d76b6cf47765644934fe15d406f2e0d
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Sat Sep 13 23:13:59 2025 -0600
+
+    Multiple threads creation and execution working
+
+commit 6692d8271c2d24cecd4cccd3a43d7f5d0ed70d89
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Sat Sep 13 22:20:52 2025 -0600
+
+    Minor change to capture the result generated by square function after function thread terminates
+
+commit 594d9c4ceaf07ee1063a2f9e9b2fa18cbb395dc5
+Author: Aakash <aakashjana2002@gmail.com>
+Date:   Sat Sep 13 22:14:14 2025 -0600
+
+    Minimum single thread program created, compiled and tested OK
+
+commit fef50bf484d5883a5b807c63afd254be7d8939cb
+Author: Aakash Jana <aaj284@usask.ca>
+Date:   Sat Sep 13 12:59:21 2025 -0600
+
+    Created a simple worker process and thread
+
+commit e28f8c7e8b4c54d248fb34df3b2ed84a7b87ef13
+Merge: 3ab4e14 a08c563
+Author: Aakash Jana <aaj284@usask.ca>
+Date:   Fri Sep 12 19:28:10 2025 -0600
+
+    Fixed a letter in Makefile; check if the Makefile compiles the C file correctly
+
+commit 3ab4e14132d7cd17bba6fda51249f54d5df72a64
+Author: Aakash Jana <aaj284@usask.ca>
+Date:   Fri Sep 12 19:13:48 2025 -0600
+
+    Created a starter c file that takes required args and prints them
+
+commit a08c563ff592d1236b3d63112163539938d4de85
+Author: naj474 <naj474@usask.ca>
+Date:   Fri Sep 12 19:02:26 2025 -0600
+
+    Created a Makefile for initial build and compile
+
+commit 10e5c6466395dd51039b8f4aa5c03b15103901df
+Author: Aakash Jana <aaj284@usask.ca>
+Date:   Fri Sep 12 18:01:35 2025 -0600
+
+    Local branch commit to practice git strategy
+
+commit d95c3d3ed781bd2fbd32b35ed6c636f0f4c8c262
+Author: Aakash Jana (aaj284) <jana.aakash@usask.ca>
+Date:   Fri Sep 12 17:51:02 2025 -0600
+
+    Added a README file
+
+commit be2af0821b7b5636b703ba6bfc586712b56dab2e
+Author: naj474 <naj474@usask.ca>
+Date:   Fri Sep 12 17:48:45 2025 -0600
+
+    Initial commit
