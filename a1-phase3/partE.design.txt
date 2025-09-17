@@ -1,0 +1,80 @@
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+
+# Part E: System Call Tracing Design Document
+
+## Overview
+This part implements a system call tracing feature in xv6. The trace syscall
+  allows a user process to enable tracing for specific syscalls using a
+  bitmask. When enabled, the kernel prints a trace line for each matching
+  syscall, showing the process ID, syscall name, and return value.
+
+## Design Decisions
+- **Trace Mask:** Each process has a `trace_mask` field in its `struct proc`.
+  The mask is set via the `trace` syscall and inherited on fork.
+- **Syscall Table:** The kernel maintains arrays mapping syscall numbers to
+  handler functions and names. The mask uses `1 << syscall_number` to enable
+  tracing for specific syscalls.
+- **Tracing Logic:** In the syscall handler, after executing a syscall, the
+  kernel checks if tracing is enabled for that syscall and prints a trace
+  line if so.
+- **User Program:** The `trace` user program parses the mask and command,
+  calls the `trace` syscall, and execs the target program. It does not print extra output.
+
+## Implementation Steps
+1. Add `trace_mask` to `struct proc` in `proc.h` and ensure it is inherited
+  in `proc.c` (fork).
+2. Implement `sys_trace` in `sysproc.c` to set the mask.
+3. Add `SYS_trace` to `syscall.h`, `user.h`, and `usys.pl`.
+4. Add `sys_trace` to the syscall table and prototypes in `syscall.c`.
+5. Update the syscall handler in `syscall.c` to print trace output if enabled.
+6. Implement the `trace` user program to set the mask and exec the target
+  command.
+7. Update the Makefile to include `trace` in UPROGS.
+
+## Edge Cases
+- If a syscall number is not mapped, print the syscall number instead of the
+  name.
+- The mask should only affect the calling process and its children.
+- The user program should handle incorrect arguments gracefully.
+
+---
+
+# Part E: System Call Tracing Test Plan
+
+## Test 1: Basic Tracing
+- **Command:** `trace 32 grep hello README`
+- **Expected:** Only `read` syscalls (number 5) are traced. Output lines like:
+  `PID: syscall read -> <return value>`
+
+## Test 2: Multiple Syscalls
+- **Command:** `trace 48 cat README`
+- **Expected:** Traces `read` (32) and `write` (16) syscalls. Output lines for
+  both.
+
+## Test 3: All Syscalls
+- **Command:** `trace 0xFFFFFFFF echo hi`
+- **Expected:** Traces all syscalls made by `echo`.
+
+## Test 4: Invalid Arguments
+- **Command:** `trace`
+- **Expected:** Error message, usage printed, no tracing.
+
+## Test 5: Fork Inheritance
+- **Command:** `trace 32 sh -c "cat README"`
+- **Expected:** Child process inherits mask, traced syscalls printed for child.
+
+## Test 6: Unknown Syscall
+- **Command:** Use a mask for a syscall number not mapped in `syscall_names[]`.
+- **Expected:** Output uses syscall number instead of name.
+
+## Test 7: No Tracing
+- **Command:** Run a program without using `trace`.
+- **Expected:** No trace output printed.
+
+---
+
+## How to Run Tests
+- Build xv6 and run each command in the shell.
+- Compare output to expected results above.
+- Check edge cases and error handling.
