@@ -1,0 +1,405 @@
+Nandish Jha NAJ474 11282001
+Aakash Jana AAJ284 11297343
+
+=======================================
+Part A2 Comprehensive Test Plan
+=======================================
+
+Overview:
+---------
+This test plan provides exhaustive testing coverage for Part A2, which
+implements a multi-threaded solution using UBC pthreads library to compute
+squares using a recursive algorithm. The implementation creates a parent
+thread that spawns multiple child threads using the Create() function, each
+calling Square(N) for values 1 to N until a deadline is reached.
+
+Implementation Details:
+----------------------
+- Uses UBC pthreads library with Create() function for thread creation
+- Parent thread created in mainp() function using Create()
+- Child threads created by parent thread using Create()
+- Global volatile flag 'keep_running' controls execution
+- Thread-local storage for current_thread identification
+- Timing measurements using gettimeofday() for microsecond precision
+- Memory allocation for thread PIDs, IDs, and square counters
+- Thread termination using Kill() function
+- Uses Sleep() for timing delays (UBC-specific sleep function)
+
+Test Categories:
+================
+
+1. BASIC FUNCTIONALITY TESTS
+-----------------------------
+
+Test Case A2.1.1: Single Thread Configuration
+- Input: 1 thread, 2 second deadline, size 5
+- Purpose: Test single UBC thread creation and execution
+- Expected Results:
+  * Single child thread created successfully with valid PID
+  * Thread completes multiple Square(1) to Square(5) iterations
+  * Proper timing measurements using gettimeofday()
+  * Clean thread termination using Kill()
+  * Parent summary shows correct square call count
+
+Test Case A2.1.2: Standard Multi-Thread Configuration
+- Input: 4 threads, 5 second deadline, size 10
+- Purpose: Test typical UBC pthread execution
+- Expected Results:
+  * All 4 child threads created with unique PIDs
+  * Each thread repeatedly loops through Square(1) to Square(10) until
+      deadline
+  * Threads run concurrently for approximately 5 seconds
+  * keep_running flag properly stops execution after deadline
+  * Each thread reports elapsed time and total square call count
+  * Parent thread summary matches individual thread reports
+  * Square call count much higher than size (multiple complete loops)
+
+Test Case A2.1.3: Higher Thread Count
+- Input: 8 threads, 3 second deadline, size 15
+- Purpose: Test UBC pthread scalability
+- Expected Results:
+  * All 8 threads created without UBC library errors
+  * Concurrent execution without thread interference
+  * Proper resource management through UBC library
+  * No thread PID conflicts or memory issues
+
+2. UBC PTHREAD-SPECIFIC TESTS
+------------------------------
+
+Test Case A2.2.1: UBC Create() Function Verification
+- Input: 6 threads, 4 second deadline, size 12
+- Purpose: Test UBC-specific thread creation parameters
+- Expected Results:
+  * Create() with ChildThreadFunction succeeds for all threads
+  * Stack size of 65536 bytes allocated correctly
+  * Thread name "ChildThread" assigned properly
+  * NORM priority and USR scheduling work correctly
+  * PIDs returned are not PNUL
+
+Test Case A2.2.2: UBC Kill() Function Verification
+- Input: 3 threads, 6 second deadline, size 20
+- Purpose: Test UBC-specific thread termination
+- Expected Results:
+  * Kill() function properly terminates threads
+  * No zombie threads remain after termination
+  * Clean resource cleanup through UBC library
+  * Thread termination messages display correctly
+
+Test Case A2.2.3: UBC Sleep() Function Accuracy
+- Input: 2 threads, 10 second deadline, size 8
+- Purpose: Test UBC Sleep() timing accuracy
+- Expected Results:
+  * Sleep(deadline) provides accurate timing
+  * Parent sleeps for exact deadline duration
+  * Child thread sleep(1) provides proper initialization delay
+  * Timing measurements remain consistent
+
+3. BOUNDARY AND EDGE CASE TESTS
+--------------------------------
+
+Test Case A2.3.1: Minimum Boundary Values
+- Input: 1 thread, 1 second deadline, size 1
+- Purpose: Test absolute minimum valid parameters
+- Expected Results:
+  * Single thread executes Square(1) repeatedly for 1 second
+  * UBC library handles minimal configuration properly
+  * Accurate timing measurements with gettimeofday()
+  * Proper initialization and cleanup
+
+Test Case A2.3.2: High Thread Count Boundary
+- Input: 100 threads, 10 second deadline, size 50
+- Purpose: Test UBC library with higher thread counts
+- Expected Results:
+  * UBC library handles moderate thread counts properly
+  * No memory allocation failures within reasonable limits
+  * Proper resource cleanup
+  * System remains stable throughout execution
+
+Test Case A2.3.3: Quick Deadline Test
+- Input: 5 threads, 1 second deadline, size 1000
+- Purpose: Test behavior with very short execution time
+- Expected Results:
+  * Threads start but may not complete many iterations
+  * keep_running flag properly stops execution quickly
+  * All threads terminate within deadline + cleanup time
+  * UBC Kill() handles rapid termination
+
+Test Case A2.3.4: Extended Execution Test
+- Input: 3 threads, 60 second deadline, size 100
+- Purpose: Test extended execution stability with UBC
+- Expected Results:
+  * Stable execution for full 60 seconds
+  * UBC library maintains thread integrity
+  * Consistent square call counting over time
+  * No UBC-related memory leaks or resource exhaustion
+
+4. ERROR HANDLING AND VALIDATION TESTS
+---------------------------------------
+
+Test Case A2.4.1: Invalid Thread Count - Zero
+- Input: 0 threads, 5 second deadline, size 10
+- Purpose: Test input validation for thread count
+- Expected Results:
+  * Program displays error message about thread count range
+  * Program exits with error message
+  * No UBC thread creation attempted
+
+Test Case A2.4.2: Invalid Thread Count - Negative
+- Input: -3 threads, 5 second deadline, size 10
+- Purpose: Test negative thread count handling
+- Expected Results:
+  * Program displays error message about valid range
+  * Program exits with error message
+  * UBC library not invoked
+
+Test Case A2.4.3: Invalid Thread Count - Excessive
+- Input: 1001 threads, 5 second deadline, size 10
+- Purpose: Test upper bound validation
+- Expected Results:
+  * Program displays error message about maximum thread limit
+  * Program exits with error message
+
+Test Case A2.4.4: Invalid Deadline - Zero
+- Input: 4 threads, 0 second deadline, size 10
+- Purpose: Test deadline validation
+- Expected Results:
+  * Program displays error message about deadline range
+  * Program exits with error message
+
+Test Case A2.4.5: Invalid Deadline - Negative
+- Input: 4 threads, -2 second deadline, size 10
+- Purpose: Test negative deadline handling
+- Expected Results:
+  * Program displays error message
+  * Program exits with error message
+
+Test Case A2.4.6: Invalid Deadline - Excessive
+- Input: 4 threads, 121 second deadline, size 10
+- Purpose: Test upper deadline bound
+- Expected Results:
+  * Program displays error message about maximum deadline
+  * Program exits with error message
+
+Test Case A2.4.7: Invalid Size - Zero
+- Input: 4 threads, 5 second deadline, size 0
+- Purpose: Test size parameter validation
+- Expected Results:
+  * Program displays error message about size range
+  * Program exits with error message
+
+Test Case A2.4.8: Invalid Size - Negative
+- Input: 4 threads, 5 second deadline, size -5
+- Purpose: Test negative size handling
+- Expected Results:
+  * Program displays error message
+  * Program exits with error message
+
+Test Case A2.4.9: Invalid Size - Excessive
+- Input: 4 threads, 5 second deadline, size 10001
+- Purpose: Test upper size bound
+- Expected Results:
+  * Program displays error message about maximum size
+  * Program exits with error message
+
+Test Case A2.4.10: UBC Thread Creation Failure Simulation
+- Input: 500 threads, 5 second deadline, size 10
+- Purpose: Test handling of UBC Create() failures
+- Expected Results:
+  * Program detects Create() returning PNUL
+  * Appropriate error message displayed
+  * Program returns from ParentThreadFunction gracefully
+
+Test Case A2.4.11: Insufficient Arguments
+- Input: partA2 4 5 (missing size parameter)
+- Purpose: Test argument count validation
+- Expected Results:
+  * Program displays "Error: Expecting 3 arguments"
+  * Program exits with error message
+
+5. MEMORY AND RESOURCE MANAGEMENT TESTS
+----------------------------------------
+
+Test Case A2.5.1: UBC Memory Allocation Stress Test
+- Input: 100 threads, 10 second deadline, size 50
+- Purpose: Test memory allocation with UBC library
+- Expected Results:
+  * All UBC thread allocations succeed
+  * Stack space (65536 bytes per thread) allocated properly
+  * No memory leaks in UBC thread management
+  * Proper cleanup of all UBC resources
+
+Test Case A2.5.2: Repeated Execution Test
+- Input: Run same configuration 10 times consecutively
+- Purpose: Test for UBC library memory leaks
+- Expected Results:
+  * Each run executes successfully
+  * No accumulation of UBC thread resources
+  * Consistent memory usage across runs
+  * UBC library maintains stability
+
+Test Case A2.5.3: Resource Cleanup Verification
+- Input: 12 threads, 4 second deadline, size 25
+- Purpose: Verify proper UBC resource cleanup
+- Expected Results:
+  * All threads properly killed with Kill() function
+  * No orphaned UBC threads remain
+  * Memory allocated for args, PIDs, counters freed
+  * UBC library resources properly released
+
+6. TIMING AND SYNCHRONIZATION TESTS
+------------------------------------
+
+Test Case A2.6.1: gettimeofday() Timing Accuracy
+- Input: 4 threads, 5 second deadline, size 10
+- Purpose: Verify timing measurement accuracy
+- Expected Results:
+  * gettimeofday() provides microsecond precision
+  * Thread timing calculations accurate to milliseconds
+  * Parent thread timing matches deadline duration
+  * Total program time includes UBC overhead
+
+Test Case A2.6.2: Thread Synchronization Verification
+- Input: 6 threads, 8 second deadline, size 30
+- Purpose: Test UBC thread synchronization
+- Expected Results:
+  * All threads start execution nearly simultaneously
+  * keep_running flag affects all threads consistently
+  * Thread timing measurements show concurrent execution
+  * No race conditions in square counter updates
+
+Test Case A2.6.3: Deadline Precision Test
+- Input: 3 threads, 7 second deadline, size 20
+- Purpose: Test deadline timing precision with UBC Sleep()
+- Expected Results:
+  * Parent sleeps for exactly 7 seconds
+  * Child threads stop within 100ms of deadline
+  * Total execution time close to deadline + cleanup
+  * UBC Sleep() function provides accurate delays
+
+7. THREAD LIFECYCLE WITH UBC TESTS
+-----------------------------------
+
+Test Case A2.7.1: UBC Thread Creation Lifecycle
+- Input: 4 threads, 5 second deadline, size 15
+- Purpose: Verify UBC thread creation process
+- Expected Results:
+  * Create() function calls succeed
+  * ChildThreadFunction executes properly
+  * Thread parameters passed correctly
+  * Valid PIDs returned and stored
+
+Test Case A2.7.2: UBC Thread Execution Lifecycle
+- Input: 4 threads, 4 second deadline, size 12
+- Purpose: Verify UBC thread execution behavior
+- Expected Results:
+  * Threads start with proper argument passing
+  * current_thread variable set correctly in each thread
+  * Square() function called with proper thread context
+  * Thread execution continues until keep_running = 0
+
+Test Case A2.7.3: UBC Thread Termination Lifecycle
+- Input: 7 threads, 3 second deadline, size 18
+- Purpose: Verify UBC thread termination process
+- Expected Results:
+  * Kill() function called for each thread PID
+  * Threads terminate cleanly without corruption
+  * Thread termination messages display properly
+  * No lingering UBC thread processes
+
+8. OUTPUT FORMAT AND MESSAGING TESTS
+-------------------------------------
+
+Test Case A2.8.1: UBC-Specific Output Verification
+- Input: 3 threads, 5 second deadline, size 10
+- Purpose: Verify UBC-specific output formatting
+- Expected Results:
+  * "Parent thread created successfully (PID: X)" displays
+  * Child thread creation messages show PID numbers
+  * Thread execution messages properly formatted
+  * Parent summary matches UBC thread behavior
+
+Test Case A2.8.2: Error Message Verification
+- Input: Various invalid inputs
+- Purpose: Test UBC-specific error messaging
+- Expected Results:
+  * "Failed to create child thread X" when Create() fails
+  * Memory allocation failure messages
+  * Proper error codes returned
+
+9. INTEGRATION TESTS WITH UBC LIBRARY
+--------------------------------------
+
+Test Case A2.9.1: UBC Library Integration
+- Input: 6 threads, 8 second deadline, size 25
+- Purpose: Test full integration with UBC pthreads
+- Expected Results:
+  * Seamless integration with UBC library functions
+  * Proper linking with UBC pthread library
+  * All UBC-specific features work correctly
+  * No conflicts between UBC and standard libraries
+
+Test Case A2.9.2: Square Function Integration with UBC
+- Input: 4 threads, 6 second deadline, size 20
+- Purpose: Verify Square() integration with UBC threads
+- Expected Results:
+  * Square() function called correctly from UBC threads
+  * Thread-local current_thread variable works with UBC
+  * Square counter incremented properly in UBC context
+  * No interference between UBC threads calling Square()
+
+10. PERFORMANCE AND STRESS TESTS
+---------------------------------
+
+Test Case A2.10.1: UBC Threading Performance
+- Input: 12 threads, 15 second deadline, size 40
+- Purpose: Test UBC library performance under moderate load
+- Expected Results:
+  * UBC threads created efficiently
+  * Reasonable performance characteristics
+  * No significant overhead from UBC library
+  * Stable performance throughout execution
+
+Test Case A2.10.2: UBC Resource Management Test
+- Input: 25 threads, 10 second deadline, size 30
+- Purpose: Test UBC behavior with multiple threads
+- Expected Results:
+  * UBC library handles multiple threads gracefully
+  * Fair scheduling among UBC threads
+  * No deadlocks or race conditions in UBC context
+  * Proper resource management
+
+Testing Environment:
+====================
+- Platform: Linux with UBC pthreads library installed
+- Compiler: GCC with UBC pthread library linking
+- Required Libraries: /student/cmpt332/pthreads/lib/Linuxx86_64/libpthreads.a
+- Memory: Sufficient for UBC thread stack allocation (65536 bytes per thread)
+- Execution: Command line with mainp() as entry point
+
+Test Execution Strategy:
+========================
+1. Verify UBC library installation and linking
+2. Test basic UBC functionality before complex scenarios
+3. Validate UBC-specific features (Create, Kill, Sleep)
+4. Test error handling with UBC library failures
+5. Perform stress testing within UBC library limits
+6. Verify proper UBC resource cleanup
+
+Expected Results Documentation:
+==============================
+- Record UBC library version and configuration
+- Document all UBC-specific function calls and returns
+- Note any UBC library limitations encountered
+- Record performance characteristics of UBC threads
+- Document memory usage with UBC library
+- Record any UBC-specific error conditions
+
+Test Completion Criteria:
+=========================
+- All UBC library functions work correctly
+- Thread creation/termination reliable with UBC
+- Input validation prevents UBC library misuse
+- Timing measurements accurate with UBC implementation
+- Resource cleanup complete for UBC threads
+- Performance acceptable for UBC pthread implementation
+- Error handling robust for UBC-specific failures
