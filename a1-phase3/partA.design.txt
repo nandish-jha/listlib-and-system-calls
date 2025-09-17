@@ -1,0 +1,237 @@
+Nandish Jha NAJ474 11282001
+Aakash Jana AAJ284 11297343
+
+=======================
+Part A Design Document
+=======================
+
+Overview:
+---------
+Part A implements four different multi-threading and multi-processing approaches
+to demonstrate concurrent execution of a recursive square computation algorithm.
+Each implementation uses different threading/process libraries and 
+synchronization mechanisms while sharing common design patterns and objectives.
+
+The implementations are:
+- **Part A.1**: Windows threads using Win32 CreateThread API
+- **Part A.2**: UBC (University of British Columbia) pthreads library 
+- **Part A.3**: POSIX pthreads (standard pthread library)
+- **Part A.4**: UNIX processes with shared memory and signal communication
+
+Common Architecture Pattern:
+-----------------------------
+All implementations follow a consistent three-tier architecture:
+
+1. **Main Function**: 
+   - Input validation and argument parsing
+   - Program-level timing and coordination
+   - Creates a parent thread/process
+
+2. **Parent Thread/Process Function**:
+   - Creates and manages multiple child threads/processes
+   - Implements deadline-based termination
+   - Collects and reports performance statistics
+   - Handles resource cleanup
+
+3. **Child Thread/Process Function**:
+   - Executes the recursive Square() algorithm in a loop
+   - Monitors global termination flag (keep_running)
+   - Tracks individual performance metrics
+   - Reports completion status
+
+Global State Management:
+------------------------
+Each implementation uses shared global variables:
+
+```c
+volatile int keep_running = 1;           // Termination flag for all children
+volatile int *square_counter = NULL;    // Array tracking Square() calls 
+                                        // per child
+__thread int current_thread = -1;       // Thread-local storage for 
+                                        // current index
+```
+
+The `keep_running` flag enables graceful termination when the deadline expires,
+while `square_counter` provides per-thread/process performance tracking.
+
+Part A.1 - Windows Threads Implementation:
+-------------------------------------------
+**Threading Model**: Uses Win32 CreateThread API with default stack sizes
+**Time Measurement**: Windows SYSTEMTIME/FILETIME converted to ULARGE_INTEGER 
+for precise millisecond timing
+**Thread Management**: 
+- CreateThread() for child thread creation
+- CloseHandle() for resource cleanup
+- Sleep() for deadline timing (millisecond precision)
+
+**Key Features**:
+- HANDLE array for tracking child threads
+- Windows-specific time measurement with 100-nanosecond precision
+- Synchronous termination - sets keep_running=0 and waits for natural completion
+- No forced thread termination
+
+**Function Signatures**:
+```c
+DWORD WINAPI ChildThreadFunction(LPVOID lpParam)
+DWORD WINAPI ParentThreadFunction(LPVOID lpParam)
+```
+
+Part A.2 - UBC Pthreads Implementation:
+---------------------------------------
+**Threading Model**: Uses UBC pthreads library with custom stack allocation
+**Time Measurement**: gettimeofday() for microsecond precision timing
+**Thread Management**:
+- Create() function with custom stack sizes (524KB for children, 262KB for 
+  parent)
+- Kill() function for thread termination
+- Sleep() for deadline timing (second precision)
+
+**Key Features**:
+- Custom stack size allocation to handle deep recursion in Square() function
+- UBC-specific PID and PROCESS data types
+- Priority and user-level thread scheduling (NORM, USR parameters)
+- Forced termination using Kill() after deadline
+
+**Function Signatures**:
+```c
+PROCESS ChildThreadFunction(void *arg)
+PROCESS ParentThreadFunction(void *arg)
+```
+
+**Stack Size Configuration**:
+- Child threads: 524,288 bytes (512KB) to handle deep Square() recursion
+- Parent thread: 262,144 bytes (256KB) for coordination tasks
+
+Part A.3 - POSIX Pthreads Implementation:
+------------------------------------------
+**Threading Model**: Standard POSIX pthreads using pthread_create/pthread_detach
+**Time Measurement**: gettimeofday() for microsecond precision timing
+**Thread Management**:
+- pthread_create() with default thread attributes
+- pthread_detach() for resource cleanup
+- sleep() for deadline timing (second precision)
+
+**Key Features**:
+- Standard POSIX compliance for maximum portability
+- Detached threads for automatic resource cleanup
+- Graceful termination through keep_running flag
+- No custom stack configuration (relies on system defaults)
+
+**Function Signatures**:
+```c
+void *ChildThreadFunction(void *arg)
+void *ParentThreadFunction(void *arg)
+```
+
+Part A.4 - UNIX Processes Implementation:
+------------------------------------------
+**Process Model**: fork() for child process creation with shared memory 
+communication
+**Time Measurement**: gettimeofday() for microsecond precision timing
+**Process Management**:
+- fork() for child process creation
+- shared memory (shmget/shmat) for inter-process communication
+- SIGUSR1 signal for graceful termination
+- waitpid() for process synchronization
+
+**Key Features**:
+- Shared memory segment for square_counter array
+- Signal-based communication (SIGUSR1) for termination
+- Process isolation with shared performance data
+- Proper shared memory cleanup (shmdt/shmctl)
+
+**Function Signatures**:
+```c
+void ChildProcessFunction(int process_id, int size, int *shared_counter)
+void signal_handler(int sig)
+```
+
+**Shared Memory Management**:
+- IPC_PRIVATE key for process-specific memory segment
+- Automatic cleanup on program termination
+- Safe detachment and removal of shared memory
+
+Synchronization and Termination Mechanisms:
+--------------------------------------------
+**A.1 (Windows)**: 
+- Global flag polling with Sleep() delays
+- Natural completion after keep_running=0
+- CloseHandle() for resource cleanup
+
+**A.2 (UBC pthreads)**:
+- Global flag polling with Sleep() delays  
+- Forced termination using Kill() function
+- UBC-specific resource management
+
+**A.3 (POSIX pthreads)**:
+- Global flag polling with sleep() delays
+- Graceful completion with pthread_detach()
+- Standard POSIX resource cleanup
+
+**A.4 (UNIX processes)**:
+- Signal-based termination (SIGUSR1)
+- Shared memory for state communication
+- Process wait synchronization
+
+Performance Monitoring:
+-----------------------
+All implementations track:
+- Individual thread/process execution time (millisecond precision)
+- Number of Square() function calls per thread/process
+- Total program execution time
+- Completion status (normal vs. early termination)
+
+The recursive Square() function increments square_counter[current_thread] on 
+each
+call, providing detailed performance metrics for analysis.
+
+Input Validation and Error Handling:
+------------------------------------
+Consistent validation across all implementations:
+- Number of threads/processes: 1-1000
+- Deadline: 1-120 seconds  
+- Size parameter: 1-10000
+- Memory allocation failure handling
+- Thread/process creation error handling
+
+Resource Management:
+--------------------
+Each implementation ensures proper cleanup:
+- Dynamic memory allocation/deallocation for thread arrays
+- Thread/process handle cleanup
+- Shared memory detachment (A.4 only)
+- Global variable reset
+
+Compilation and Platform Requirements:
+--------------------------------------
+- **A.1**: Windows environment with Win32 API support
+- **A.2**: Linux with UBC pthreads library
+- **A.3**: Linux with standard pthread library (-lpthread)
+- **A.4**: Linux with System V IPC support
+
+**Makefile targets**: partA1, partA2, partA3, partA4 with appropriate linking 
+flags
+
+Design Rationale:
+-----------------
+1. **Consistent Architecture**: All implementations follow the same three-tier 
+pattern for easier comparison and maintenance
+
+2. **Stack Size Management**: A.2 uses custom stack sizes to handle deep 
+recursion in Square() function, preventing stack overflow with large input 
+values
+
+3. **Time Precision**: Platform-appropriate timing mechanisms (Windows FILETIME
+vs. Unix gettimeofday) for accurate performance measurement
+
+4. **Graceful vs. Forced Termination**: A.1 and A.3 use graceful termination, 
+A.2 uses forced termination, A.4 uses signal-based termination
+
+5. **Resource Isolation**: A.4 uses process isolation for maximum fault 
+tolerance, while A.1-A.3 use shared memory space for efficiency
+
+6. **Global State Pattern**: Volatile variables ensure visibility across 
+threads/processes while __thread provides thread-local storage
+
+This design enables direct comparison of different concurrency models while 
+maintaining functional equivalence across all implementations.

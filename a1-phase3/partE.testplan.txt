@@ -1,0 +1,36 @@
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+
+# Part E: System Call Tracing Test Plan
+
+## Test 1: Trace Single Syscall
+- **Command:** `trace 32 grep hello README`
+- **Expected Output:** Only `read` syscalls traced. Lines like:
+  `<pid>: syscall read -> <return value>`
+
+## Test 2: Trace Multiple Syscalls
+- **Command:** `trace 48 cat README`
+- **Expected Output:** Traces `read` and `write` syscalls. Lines for both.
+
+## Test 3: Trace All Syscalls
+- **Command:** `trace 0xFFFFFFFF echo hi`
+- **Expected Output:** All syscalls traced for `echo`.
+
+## Test 4: Invalid Usage
+- **Command:** `trace`
+- **Expected Output:** Error message, usage printed, no tracing.
+
+## Test 5: Fork Inheritance
+- **Command:** `trace 32 sh -c "cat README"`
+- **Expected Output:** Child inherits mask, traced syscalls printed for child.
+
+## Test 6: No Trace
+- **Command:** Run a program without `trace`.
+- **Expected Output:** No trace output printed.
+
+---
+
+## Instructions
+- Build xv6 and run each command in the shell.
+- Compare output to expected results.
+- Check edge cases and error handling.
