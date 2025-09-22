@@ -1,0 +1,217 @@
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+
+=======================
+Part C Test Plan
+=======================
+
+Overview:
+---------
+This document outlines the test plan for the linked list implementation, 
+testing both basic and advanced functionality across multiple list instances.
+The test cases verify the correctness of list operations including creation,
+manipulation, and cleanup.
+
+Test Environment:
+----------------
+- Compiler: gcc with -std=gnu90
+- Test Files: mytestlist.c, list.h
+- Related Files: list_adders.c, list_movers.c, list_removers.c
+
+Test Cases:
+----------
+1. List Creation Tests
+   1.1. Create first list instance
+       Input: None
+       Expected: Non-NULL LIST pointer returned
+       Success Criteria: 
+       - testList != NULL
+       - Test counter incremented on success
+   
+   1.2. Create second list instance
+       Input: None
+       Expected: Non-NULL LIST pointer returned
+       Success Criteria: 
+       - list2 != NULL
+       - Test counter incremented on success
+
+2. Empty List State Tests
+   2.1. Check initial list count
+       Input: Empty list (testList)
+       Expected: Count should be 0
+       Success Criteria: 
+       - ListCount(testList) == 0
+       - Test counter incremented on success
+       - Success message printed
+
+3. List Append Operations
+   3.1. Append first item
+       Input: item1 = 100
+       Expected: Successful append
+       Success Criteria: 
+       - Return value 0
+       - Test counter incremented on success
+       - Success message printed
+
+   3.2. Append second item
+       Input: item2 = 200
+       Expected: Successful append
+       Success Criteria: 
+       - Return value 0
+       - Test counter incremented on success
+       - Success message printed
+
+   3.3. Append third item
+       Input: item3 = 300
+       Expected: Successful append
+       Success Criteria: 
+       - Return value 0
+       - Test counter incremented on success
+       - Success message printed
+
+4. List Count Verification
+   4.1. Check count after additions
+       Input: List with 3 items
+       Expected: Count should be 3
+       Success Criteria: 
+       - ListCount(testList) == 3
+       - Test counter incremented on success
+       - Success message printed
+       - Failure message includes actual count if test fails
+
+5. Navigation Tests
+   5.1. Test ListFirst
+       Input: List with items [100,200,300]
+       Expected: Returns first item (100)
+       Success Criteria: *(int*)ListFirst(testList) == 100
+
+   5.2. Test ListLast
+       Input: List with items [100,200,300]
+       Expected: Returns last item (300)
+       Success Criteria: *(int*)ListLast(testList) == 300
+
+   5.3. Test ListNext
+       Input: Cursor at last position
+       Expected: Returns NULL
+       Success Criteria: ListNext(testList) == NULL
+
+6. List Insert Operations
+   6.1. Insert in middle
+       Input: item4 = 150, position after first item
+       Expected: Successful insertion
+       Success Criteria: Return value 0, proper position verified
+
+7. List Prepend Operations
+   7.1. Prepend to front
+       Input: item5 = 95
+       Expected: Successful prepend to front
+       Success Criteria: First item is 95
+
+8. Multiple List Operations
+   8.1. Append to second list
+       Input: list2, items [350,400,450]
+       Expected: Three successful appends
+       Success Criteria: Return value 0 for each append
+
+9. List Concatenation
+   9.1. Concatenate list2 to testList
+       Input: testList and list2
+       Expected: All items from list2 added to testList
+       Success Criteria: 
+       - Combined count equals 8
+       - list2 count equals 0
+
+10. List Remove Operations
+    10.1. Remove current item
+        Input: List with cursor at current position
+        Expected: Successfully remove item
+        Success Criteria: Removed item not NULL
+
+11. List Cleanup
+    11.1. Free list memory
+        Input: testList
+        Expected: Successful memory deallocation
+        Success Criteria: No memory leaks
+
+12. List Search
+   12.1. Present item (inclusive of current)
+        Input: item3 = 300, cursor at head
+        Expected: Returns pointer to 300; cursor left on 300
+        Success: non-NULL return, *(int*)ret == 300, ListCurr()==300
+   
+   12.2. Present item (inclusive of current)
+        Input: item3 = 300, cursor at head
+        Expected: Cursor is at the found item's node position
+        Success: ListCurr returns the same node position
+
+   12.3. Absent item
+        Input: key = 750, cursor at head
+        Expected: Returns NULL; cursor moves to 'after' state
+        Success: return NULL, testList->after == 1
+   
+   12.3. Absent item
+        Input: key = 750, cursor at head
+        Expected: cursor is left at tail
+        Success: if list->tail and cursor are same!
+
+13. List Remove
+   13.1. Remove current item (middle)
+        Setup: cursor advanced several steps into list
+        Expected: Removed item non-NULL; 
+        count decremented by 1; item not found by search
+        Success: (count-1) == ListCount(), ListSearch(..., removed) == NULL
+
+14. List Trim
+   14.1. Trim last item
+        Input: ListTrim(testList)
+        Expected: Returns last item; list count decremented by 1; 
+        item not found by search
+        Success: (count-1) == ListCount(), ListSearch(..., removed) == NULL
+
+15. List Free
+   15.1. Free list structure and items
+        Input: ListFree(testList, free_int)
+        Expected: Items freed via callback; nodes recycled;
+         list returned to free-list
+        Success: "List freed successfully" and free_list_head reflects push
+
+
+Test Execution:
+--------------
+1. Compile the test program:
+   make clean && make 
+   OR 
+   bash partB.bash partC
+
+2. Run the test program (Not required if running bash script):
+   ./mytestlist
+
+3. Monitor test progress:
+   - Program tracks number of passed tests with tests_passed counter
+   - Each successful test increments the counter (total of 15 tests)
+   - Success/failure messages are printed for each test
+   - Final test results should show 15/15 tests passed for complete success
+
+4. Test Success Validation:
+   - All 15 tests must pass
+   - tests_passed counter should reach 15 by end of execution
+   - No error messages should be displayed
+   - All operations should maintain list integrity
+
+Expected Results:
+---------------
+- All test cases should pass without errors
+- The orderring and combination of test case execution itself exercises
+    the data structure in several ways.
+- Memory Pool should be properly managed without any accidental overlap
+- List operations should maintain data integrity
+- Multiple list instances should work independently 
+    no interference with NODEs from other lists
+- Concatenation should properly combine lists and free up the 2nd list
+
+Notes:
+------
+- Test cases are designed to verify both basic and simple edge cases
+- Each operation is verified for correct return values
+- List state is validated after each operation
+- Memory management is tested throughout the process

@@ -1,0 +1,1204 @@
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+
+diff --git a/.vscode/settings.json b/.vscode/settings.json
+new file mode 100644
+index 0000000..93bc4d3
+--- /dev/null
++++ b/.vscode/settings.json
+@@ -0,0 +1,10 @@
++{
++    "files.associations": {
++        "functional": "c",
++        "random": "c",
++        "square.h": "c",
++        "stat.h": "c",
++        "types.h": "c",
++        "vm.h": "c"
++    }
++}
+\ No newline at end of file
+diff --git a/a1-phase3/partD.design.txt b/a1-phase3/partD.design.txt
+new file mode 100644
+index 0000000..de4874d
+--- /dev/null
++++ b/a1-phase3/partD.design.txt
+@@ -0,0 +1,112 @@
++AAKASH JANA AAJ284 11297343
++NANDISH JHA NAJ474 11282001
++
++Part D: Design Document for xv6 User Program (find)
++====================================================
++
++Overview:
++---------
++The `find` program recursively searches a directory tree for files with a specific name, printing the full path of each match. It mimics the basic functionality of the UNIX `find` command, implemented for the xv6 operating system.
++
++Design Steps:
++-------------
++1. **Argument Parsing**
++   - The program expects two arguments: the starting directory path and the target filename.
++   - If the arguments are incorrect, it prints a usage message and exits.
++
++2. **Recursive Search Function (`find`)**
++   - The main logic is implemented in a recursive function `find(path, target)`.
++   - For each call:
++     - Opens the given path.
++     - Uses `fstat` to determine if the path is a file or directory.
++
++3. **File Handling**
++   - If the path is a file:
++     - Extracts the filename from the path.
++     - Compares it to the target name using `strcmp`.
++     - If it matches, prints the full path.
++
++4. **Directory Handling and Recursion**
++   - If the path is a directory:
++     - Reads each entry using `read` and `struct dirent`.
++     - Skips entries with `inum == 0` (empty slots).
++     - Skips "." and ".." to avoid infinite recursion.
++     - Builds the full path for each entry by appending the entry name to the current path.
++     - Recursively calls `find` on each entry.
++
++5. **Path Construction**
++   - Uses a buffer to construct new paths for recursive calls.
++   - Ensures buffer size is sufficient to avoid overflow.
++
++6. **Output**
++   - Only prints the full path of files that match the target filename.
++   - Output format matches assignment requirements (e.g., ./b, ./a/b, ./a/aa/b).
++
++7. **Error Handling**
++   - Handles errors for opening and stating files/directories.
++   - Skips entries or prints error messages as appropriate.
++
++References:
++-----------
++- Used `ls.c` from xv6 as a reference for directory reading and path construction.
++- Used C string functions (`strcpy`, `strlen`, `strcmp`, etc.) for path and name handling.
++
++Testing:
++--------
++- Tested with nested directories and files to ensure correct recursive search and output.
++- Verified output matches assignment requirements.
++
++Notes:
++------
++- The program is designed to be simple and robust, following xv6 conventions and constraints.
++- All code is commented for clarity and maintainability.
++
++Part D BONUS: Design Document for xv6 User Program (primes)
++==========================================================
++
++Overview:
++---------
++The `primes` program implements a concurrent prime sieve using pipes and processes, inspired by Doug McIlroy's Unix pipeline concept. It finds all prime numbers between 2 and 35 by setting up a chain of processes, each responsible for filtering multiples of a discovered prime.
++
++Design Steps:
++-------------
++1. **Pipeline Initialization**
++   - The main process creates a pipe and forks a child.
++   - The parent writes numbers 2 through 35 into the pipe, then waits for the child to finish.
++   - The child starts the sieve process by reading from the pipe.
++
++2. **Recursive Sieve Function**
++   - The sieve function reads the first number from its input pipe; this is the next prime.
++   - It prints the prime.
++   - It creates a new pipe and forks a child for the next sieve stage.
++   - The parent reads remaining numbers, filters out multiples of its prime, and writes the rest to the new pipe.
++   - The child recursively calls the sieve function on the new pipe.
++   - The recursion terminates when there are no more numbers to read from the pipe.
++
++3. **Process and Pipe Management**
++   - Each sieve stage is a separate process, connected by pipes.
++   - File descriptors are closed as soon as they are no longer needed to avoid resource exhaustion.
++   - The parent waits for its child to finish before exiting, ensuring all processes terminate cleanly.
++
++4. **Output**
++   - Each process prints its prime in the format: `prime <number>`.
++   - The output matches the assignment requirements, listing all primes between 2 and 35.
++
++5. **Error Handling and Termination**
++   - The base case for recursion is when the pipe is empty; the process closes its file descriptor and returns.
++   - All processes exit cleanly after their work is done.
++
++References:
++-----------
++- The design is based on the classic Unix pipeline prime sieve, as described in MIT's xv6 assignment and Doug McIlroy's original concept.
++- Used xv6 system calls: `pipe`, `fork`, `read`, `write`, `close`, `wait`, and `exit`.
++
++Testing:
++--------
++- Verified that the output matches the expected list of primes.
++- Checked that all processes terminate and no file descriptor/resource leaks occur.
++
++Notes:
++------
++- The recursive structure is elegant and matches the conceptual model of a pipeline of filters.
++- An explicit return in the base case is used to help the compiler recognize recursion termination.
+diff --git a/a1-phase3/partD.find.testplan.txt b/a1-phase3/partD.find.testplan.txt
+new file mode 100644
+index 0000000..0819f6c
+--- /dev/null
++++ b/a1-phase3/partD.find.testplan.txt
+@@ -0,0 +1,57 @@
++AAKASH JANA AAJ284 11297343
++NANDISH JHA NAJ474 11282001
++
++Part D: Test Plan for xv6 User Program (find)
++============================================
++
++Objective:
++----------
++Verify that the find program correctly searches for files with a given name in a directory tree and prints their full paths.
++
++Test Cases:
++-----------
++1. **Basic file search**
++   - Create a file named 'b' in the root directory.
++   - Run: find . b
++   - Expected output: ./b
++
++2. **Search in subdirectory**
++   - Create directory 'a', then file 'a/b'.
++   - Run: find . b
++   - Expected output: ./a/b
++
++3. **Search in nested subdirectory**
++   - Create directory 'a/aa', then file 'a/aa/b'.
++   - Run: find . b
++   - Expected output: ./a/aa/b
++
++4. **Multiple matches**
++   - All above files exist.
++   - Run: find . b
++   - Expected output:
++     ./b
++     ./a/b
++     ./a/aa/b
++
++5. **No matches**
++   - Run: find . z
++   - Expected output: (no output)
++
++6. **Search for a directory name**
++   - Run: find . a
++   - Expected output: (no output, since only files are matched)
++
++7. **Invalid arguments**
++   - Run: find .
++   - Expected output: Usage: find <path> <filename>
++
++8. **Path too long**
++   - Create deeply nested directories and file with long path.
++   - Run: find . b
++   - Expected output: Should not crash; may skip long paths.
++
++Instructions:
++-------------
++- Use xv6 shell commands (echo, mkdir, etc.) to set up test files and directories.
++- Run the find program with various arguments as described above.
++- Record the output for each test case in the test results file.
+diff --git a/a1-phase3/partD.find.testresults.txt b/a1-phase3/partD.find.testresults.txt
+new file mode 100644
+index 0000000..8561a1d
+--- /dev/null
++++ b/a1-phase3/partD.find.testresults.txt
+@@ -0,0 +1,146 @@
++AAKASH JANA AAJ284 11297343
++NANDISH JHA NAJ474 11282001
++
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -g -c -o kernel/entry.o kernel/entry.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/start.o kernel/start.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/console.o kernel/console.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/printf.o kernel/printf.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/uart.o kernel/uart.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/kalloc.o kernel/kalloc.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/spinlock.o kernel/spinlock.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/string.o kernel/string.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/main.o kernel/main.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/vm.o kernel/vm.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/proc.o kernel/proc.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -g -c -o kernel/swtch.o kernel/swtch.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -g -c -o kernel/trampoline.o kernel/trampoline.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/trap.o kernel/trap.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/syscall.o kernel/syscall.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/sysproc.o kernel/sysproc.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/bio.o kernel/bio.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/fs.o kernel/fs.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/log.o kernel/log.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/sleeplock.o kernel/sleeplock.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/file.o kernel/file.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/pipe.o kernel/pipe.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/exec.o kernel/exec.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/sysfile.o kernel/sysfile.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -g -c -o kernel/kernelvec.o kernel/kernelvec.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/plic.o kernel/plic.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/virtio_disk.o kernel/virtio_disk.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T kernel/kernel.ld -o kernel/kernel kernel/entry.o kernel/start.o kernel/console.o kernel/printf.o kernel/uart.o kernel/kalloc.o kernel/spinlock.o kernel/string.o kernel/main.o kernel/vm.o kernel/proc.o kernel/swtch.o kernel/trampoline.o kernel/trap.o kernel/syscall.o kernel/sysproc.o kernel/bio.o kernel/fs.o kernel/log.o kernel/sleeplock.o kernel/file.o kernel/pipe.o kernel/exec.o kernel/sysfile.o kernel/kernelvec.o kernel/plic.o kernel/virtio_disk.o 
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S kernel/kernel > kernel/kernel.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t kernel/kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel/kernel.sym
++gcc -I. -o mkfs/mkfs mkfs/mkfs.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/ulib.o user/ulib.c
++perl user/usys.pl > user/usys.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie -c -o user/usys.o user/usys.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/printf.o user/printf.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/umalloc.o user/umalloc.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/cat.o user/cat.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_cat user/cat.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_cat > user/cat.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_cat | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/cat.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/echo.o user/echo.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_echo user/echo.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_echo > user/echo.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_echo | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/echo.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/find.o user/find.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_find user/find.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_find > user/find.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_find | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/find.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/forktest.o user/forktest.c
++# forktest has less library code linked in - needs to be small
++# in order to be able to max out the proc table.
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -N -e main -Ttext 0 -o user/_forktest user/forktest.o user/ulib.o user/usys.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_forktest > user/forktest.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/grep.o user/grep.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_grep user/grep.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_grep > user/grep.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_grep | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/grep.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/init.o user/init.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_init user/init.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_init > user/init.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_init | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/init.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/kill.o user/kill.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_kill user/kill.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_kill > user/kill.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_kill | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/kill.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/ln.o user/ln.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_ln user/ln.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_ln > user/ln.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_ln | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/ln.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/ls.o user/ls.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_ls user/ls.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_ls > user/ls.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_ls | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/ls.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/mkdir.o user/mkdir.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_mkdir user/mkdir.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_mkdir > user/mkdir.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_mkdir | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/mkdir.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/rm.o user/rm.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_rm user/rm.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_rm > user/rm.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_rm | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/rm.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/sh.o user/sh.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_sh user/sh.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_sh > user/sh.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_sh | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/sh.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/stressfs.o user/stressfs.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_stressfs user/stressfs.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_stressfs > user/stressfs.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_stressfs | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/stressfs.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/usertests.o user/usertests.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_usertests user/usertests.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_usertests > user/usertests.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_usertests | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/usertests.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/grind.o user/grind.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_grind user/grind.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_grind > user/grind.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_grind | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/grind.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/wc.o user/wc.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_wc user/wc.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_wc > user/wc.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_wc | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/wc.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/zombie.o user/zombie.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_zombie user/zombie.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_zombie > user/zombie.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_zombie | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/zombie.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/logstress.o user/logstress.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_logstress user/logstress.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_logstress > user/logstress.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_logstress | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/logstress.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/forphan.o user/forphan.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_forphan user/forphan.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_forphan > user/forphan.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_forphan | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/forphan.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/dorphan.o user/dorphan.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_dorphan user/dorphan.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_dorphan > user/dorphan.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_dorphan | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/dorphan.sym
++mkfs/mkfs fs.img README user/_cat user/_echo user/_find user/_forktest user/_grep user/_init user/_kill user/_ln user/_ls user/_mkdir user/_rm user/_sh user/_stressfs user/_usertests user/_grind user/_wc user/_zombie user/_logstress user/_forphan user/_dorphan 
++nmeta 47 (boot, super, log blocks 31, inode blocks 13, bitmap blocks 1) blocks 1953 total 2000
++balloc: first 942 blocks have been allocated
++balloc: write bitmap block at sector 46
++qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -global virtio-mmio.force-legacy=false -drive file=fs.img,if=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
++
++xv6 kernel is booting
++
++hart 2 starting
++hart 1 starting
++init: starting sh
++$ echo > b
++$ mkdir a
++$ echo > a/b
++$ mkdir a/aa
++$ echo > a/aa/b
++$ find . z
++$ find . a
++$ find .
++Usage: find <path> <filename>
++$ find . b
++./b
++./a/b
++./a/aa/b
++$ QEMU: Terminated
++
+diff --git a/a1-phase3/partD.primes.testplan.txt b/a1-phase3/partD.primes.testplan.txt
+new file mode 100644
+index 0000000..b09696f
+--- /dev/null
++++ b/a1-phase3/partD.primes.testplan.txt
+@@ -0,0 +1,40 @@
++AAKASH JANA AAJ284 11297343
++NANDISH JHA NAJ474 11282001
++
++Part D BONUS: Test Plan for xv6 User Program (primes)
++====================================================
++
++Objective:
++----------
++Verify that the primes program correctly finds and prints all prime numbers between 2 and 35 using a concurrent pipeline of processes and pipes.
++
++Test Cases:
++-----------
++1. **Basic Output Test**
++   - Run: primes
++   - Expected output:
++     prime 2
++     prime 3
++     prime 5
++     prime 7
++     prime 11
++     prime 13
++     prime 17
++     prime 19
++     prime 23
++     prime 29
++     prime 31
++
++2. **Resource Management Test**
++   - Run: primes
++   - Expected: All processes terminate, no resource leaks, xv6 does not run out of file descriptors or processes.
++
++3. **Output Format Test**
++   - Run: primes
++   - Expected: Each line starts with "prime " followed by the prime number.
++
++Instructions:
++-------------
++- Run the program in xv6 using the shell command: primes
++- Observe and record the output for each test case.
++- Check for proper termination and absence of resource leaks.
+diff --git a/a1-phase3/partD.primes.testresults.txt b/a1-phase3/partD.primes.testresults.txt
+new file mode 100644
+index 0000000..3c1f933
+--- /dev/null
++++ b/a1-phase3/partD.primes.testresults.txt
+@@ -0,0 +1,24 @@
++AAKASH JANA AAJ284 11297343
++NANDISH JHA NAJ474 11282001
++
++qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -global virtio-mmio.force-legacy=false -drive file=fs.img,if=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
++
++xv6 kernel is booting
++
++hart 2 starting
++hart 1 starting
++init: starting sh
++$ primes
++prime 2
++prime 3
++prime 5
++prime 7
++prime 11
++prime 13
++prime 17
++prime 19
++prime 23
++prime 29
++prime 31
++$ QEMU: Terminated
++
+diff --git a/a1-phase3/partE.design.txt b/a1-phase3/partE.design.txt
+new file mode 100644
+index 0000000..435aa4b
+--- /dev/null
++++ b/a1-phase3/partE.design.txt
+@@ -0,0 +1,64 @@
++# Part E: System Call Tracing Design Document
++
++## Overview
++This part implements a system call tracing feature in xv6. The trace syscall allows a user process to enable tracing for specific syscalls using a bitmask. When enabled, the kernel prints a trace line for each matching syscall, showing the process ID, syscall name, and return value.
++
++## Design Decisions
++- **Trace Mask:** Each process has a `trace_mask` field in its `struct proc`. The mask is set via the `trace` syscall and inherited on fork.
++- **Syscall Table:** The kernel maintains arrays mapping syscall numbers to handler functions and names. The mask uses `1 << syscall_number` to enable tracing for specific syscalls.
++- **Tracing Logic:** In the syscall handler, after executing a syscall, the kernel checks if tracing is enabled for that syscall and prints a trace line if so.
++- **User Program:** The `trace` user program parses the mask and command, calls the `trace` syscall, and execs the target program. It does not print extra output.
++
++## Implementation Steps
++1. Add `trace_mask` to `struct proc` in `proc.h` and ensure it is inherited in `proc.c` (fork).
++2. Implement `sys_trace` in `sysproc.c` to set the mask.
++3. Add `SYS_trace` to `syscall.h`, `user.h`, and `usys.pl`.
++4. Add `sys_trace` to the syscall table and prototypes in `syscall.c`.
++5. Update the syscall handler in `syscall.c` to print trace output if enabled.
++6. Implement the `trace` user program to set the mask and exec the target command.
++7. Update the Makefile to include `trace` in UPROGS.
++
++## Edge Cases
++- If a syscall number is not mapped, print the syscall number instead of the name.
++- The mask should only affect the calling process and its children.
++- The user program should handle incorrect arguments gracefully.
++
++---
++
++# Part E: System Call Tracing Test Plan
++
++## Test 1: Basic Tracing
++- **Command:** `trace 32 grep hello README`
++- **Expected:** Only `read` syscalls (number 5) are traced. Output lines like:
++  `PID: syscall read -> <return value>`
++
++## Test 2: Multiple Syscalls
++- **Command:** `trace 48 cat README`
++- **Expected:** Traces `read` (32) and `write` (16) syscalls. Output lines for both.
++
++## Test 3: All Syscalls
++- **Command:** `trace 0xFFFFFFFF echo hi`
++- **Expected:** Traces all syscalls made by `echo`.
++
++## Test 4: Invalid Arguments
++- **Command:** `trace`
++- **Expected:** Error message, usage printed, no tracing.
++
++## Test 5: Fork Inheritance
++- **Command:** `trace 32 sh -c "cat README"`
++- **Expected:** Child process inherits mask, traced syscalls printed for child.
++
++## Test 6: Unknown Syscall
++- **Command:** Use a mask for a syscall number not mapped in `syscall_names[]`.
++- **Expected:** Output uses syscall number instead of name.
++
++## Test 7: No Tracing
++- **Command:** Run a program without using `trace`.
++- **Expected:** No trace output printed.
++
++---
++
++## How to Run Tests
++- Build xv6 and run each command in the shell.
++- Compare output to expected results above.
++- Check edge cases and error handling.
+diff --git a/a1-phase3/partE.testplan.txt b/a1-phase3/partE.testplan.txt
+new file mode 100644
+index 0000000..87ee5d9
+--- /dev/null
++++ b/a1-phase3/partE.testplan.txt
+@@ -0,0 +1,37 @@
++# Part E: System Call Tracing Test Plan
++
++## Test 1: Trace Single Syscall
++- **Command:** `trace 32 grep hello README`
++- **Expected Output:** Only `read` syscalls traced. Lines like:
++  `<pid>: syscall read -> <return value>`
++
++## Test 2: Trace Multiple Syscalls
++- **Command:** `trace 48 cat README`
++- **Expected Output:** Traces `read` and `write` syscalls. Lines for both.
++
++## Test 3: Trace All Syscalls
++- **Command:** `trace 0xFFFFFFFF echo hi`
++- **Expected Output:** All syscalls traced for `echo`.
++
++## Test 4: Invalid Usage
++- **Command:** `trace`
++- **Expected Output:** Error message, usage printed, no tracing.
++
++## Test 5: Fork Inheritance
++- **Command:** `trace 32 sh -c "cat README"`
++- **Expected Output:** Child inherits mask, traced syscalls printed for child.
++
++## Test 6: Unknown Syscall Number
++- **Command:** Use a mask for a syscall not mapped in `syscall_names[]`.
++- **Expected Output:** Output uses syscall number instead of name.
++
++## Test 7: No Trace
++- **Command:** Run a program without `trace`.
++- **Expected Output:** No trace output printed.
++
++---
++
++## Instructions
++- Build xv6 and run each command in the shell.
++- Compare output to expected results.
++- Check edge cases and error handling.
+diff --git a/a1-phase3/partE.testresults.txt b/a1-phase3/partE.testresults.txt
+new file mode 100644
+index 0000000..69a497f
+--- /dev/null
++++ b/a1-phase3/partE.testresults.txt
+@@ -0,0 +1,296 @@
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -g -c -o kernel/entry.o kernel/entry.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/start.o kernel/start.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/console.o kernel/console.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/printf.o kernel/printf.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/uart.o kernel/uart.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/kalloc.o kernel/kalloc.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/spinlock.o kernel/spinlock.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/string.o kernel/string.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/main.o kernel/main.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/vm.o kernel/vm.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/proc.o kernel/proc.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -g -c -o kernel/swtch.o kernel/swtch.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -g -c -o kernel/trampoline.o kernel/trampoline.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/trap.o kernel/trap.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/syscall.o kernel/syscall.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/sysproc.o kernel/sysproc.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/bio.o kernel/bio.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/fs.o kernel/fs.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/log.o kernel/log.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/sleeplock.o kernel/sleeplock.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/file.o kernel/file.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/pipe.o kernel/pipe.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/exec.o kernel/exec.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/sysfile.o kernel/sysfile.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -g -c -o kernel/kernelvec.o kernel/kernelvec.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/plic.o kernel/plic.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o kernel/virtio_disk.o kernel/virtio_disk.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T kernel/kernel.ld -o kernel/kernel kernel/entry.o kernel/start.o kernel/console.o kernel/printf.o kernel/uart.o kernel/kalloc.o kernel/spinlock.o kernel/string.o kernel/main.o kernel/vm.o kernel/proc.o kernel/swtch.o kernel/trampoline.o kernel/trap.o kernel/syscall.o kernel/sysproc.o kernel/bio.o kernel/fs.o kernel/log.o kernel/sleeplock.o kernel/file.o kernel/pipe.o kernel/exec.o kernel/sysfile.o kernel/kernelvec.o kernel/plic.o kernel/virtio_disk.o 
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S kernel/kernel > kernel/kernel.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t kernel/kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > kernel/kernel.sym
++gcc -I. -o mkfs/mkfs mkfs/mkfs.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/ulib.o user/ulib.c
++perl user/usys.pl > user/usys.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie -c -o user/usys.o user/usys.S
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/printf.o user/printf.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/umalloc.o user/umalloc.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/cat.o user/cat.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_cat user/cat.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_cat > user/cat.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_cat | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/cat.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/echo.o user/echo.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_echo user/echo.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_echo > user/echo.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_echo | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/echo.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/forktest.o user/forktest.c
++# forktest has less library code linked in - needs to be small
++# in order to be able to max out the proc table.
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -N -e main -Ttext 0 -o user/_forktest user/forktest.o user/ulib.o user/usys.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_forktest > user/forktest.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/grep.o user/grep.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_grep user/grep.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_grep > user/grep.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_grep | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/grep.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/init.o user/init.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_init user/init.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_init > user/init.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_init | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/init.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/kill.o user/kill.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_kill user/kill.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_kill > user/kill.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_kill | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/kill.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/ln.o user/ln.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_ln user/ln.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_ln > user/ln.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_ln | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/ln.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/ls.o user/ls.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_ls user/ls.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_ls > user/ls.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_ls | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/ls.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/mkdir.o user/mkdir.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_mkdir user/mkdir.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_mkdir > user/mkdir.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_mkdir | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/mkdir.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/rm.o user/rm.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_rm user/rm.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_rm > user/rm.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_rm | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/rm.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/sh.o user/sh.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_sh user/sh.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_sh > user/sh.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_sh | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/sh.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/stressfs.o user/stressfs.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_stressfs user/stressfs.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_stressfs > user/stressfs.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_stressfs | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/stressfs.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/usertests.o user/usertests.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_usertests user/usertests.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_usertests > user/usertests.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_usertests | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/usertests.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/grind.o user/grind.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_grind user/grind.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_grind > user/grind.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_grind | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/grind.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/wc.o user/wc.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_wc user/wc.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_wc > user/wc.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_wc | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/wc.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/zombie.o user/zombie.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_zombie user/zombie.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_zombie > user/zombie.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_zombie | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/zombie.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/logstress.o user/logstress.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_logstress user/logstress.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_logstress > user/logstress.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_logstress | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/logstress.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/forphan.o user/forphan.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_forphan user/forphan.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_forphan > user/forphan.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_forphan | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/forphan.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/dorphan.o user/dorphan.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_dorphan user/dorphan.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_dorphan > user/dorphan.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_dorphan | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/dorphan.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/find.o user/find.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_find user/find.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_find > user/find.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_find | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/find.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/primes.o user/primes.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_primes user/primes.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_primes > user/primes.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_primes | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/primes.sym
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-gcc -Wall -Werror -Wno-unknown-attributes -O -fno-omit-frame-pointer -ggdb -gdwarf-2 -MD -mcmodel=medany -ffreestanding -fno-common -nostdlib -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero -fno-builtin-strchr -fno-builtin-exit -fno-builtin-malloc -fno-builtin-putc -fno-builtin-free -fno-builtin-memcpy -Wno-main -fno-builtin-printf -fno-builtin-fprintf -fno-builtin-vprintf -I. -fno-stack-protector -fno-pie -no-pie   -c -o user/trace.o user/trace.c
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-ld -z max-page-size=4096 -T user/user.ld -o user/_trace user/trace.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -S user/_trace > user/trace.asm
++/student/cmpt332/xv6-2025/riscv/bin/riscv64-unknown-linux-gnu-objdump -t user/_trace | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$/d' > user/trace.sym
++mkfs/mkfs fs.img README user/_cat user/_echo user/_forktest user/_grep user/_init user/_kill user/_ln user/_ls user/_mkdir user/_rm user/_sh user/_stressfs user/_usertests user/_grind user/_wc user/_zombie user/_logstress user/_forphan user/_dorphan user/_find user/_primes user/_trace
++nmeta 47 (boot, super, log blocks 31, inode blocks 13, bitmap blocks 1) blocks 1953 total 2000
++balloc: first 1014 blocks have been allocated
++balloc: write bitmap block at sector 46
++qemu-system-riscv64 -machine virt -bios none -kernel kernel/kernel -m 128M -smp 3 -nographic -global virtio-mmio.force-legacy=false -drive file=fs.img,if=none,format=raw,id=x0 -device virtio-blk-device,drive=x0,bus=virtio-mmio-bus.0
++
++xv6 kernel is booting
++
++hart 2 starting
++hart 1 starting
++init: starting sh
++$ trace 32 grep hello README
++3: syscall read -> 1023
++3: syscall read -> 965
++3: syscall read -> 437
++3: syscall read -> 0
++$
++$ trace 2147483647 grep hello README
++4: syscall trace -> 0
++4: syscall exec -> 3
++4: syscall open -> 3
++4: syscall read -> 1023
++4: syscall read -> 965
++4: syscall read -> 437
++4: syscall read -> 0
++4: syscall close -> 0
++$ 
++$ grep hello README
++$ 
++$ trace 2 usertests forkforkfork
++usertests starting
++test forkforkfork: 6: syscall fork -> 7
++7: syscall fork -> 8
++8: syscall fork -> 9
++8: syscall fork -> 10
++9: syscall fork -> 11
++8: syscall fork -> 12
++9: syscall fork -> 13
++8: syscall fork -> 14
++9: syscall fork -> 15
++8: syscall fork -> 16
++9: syscall fork -> 17
++8: syscall fork -> 18
++9: syscall fork -> 19
++8: syscall fork -> 20
++8: syscall fork -> 21
++8: syscall fork -> 22
++9: syscall fork -> 23
++9: syscall fork -> 24
++8: syscall fork -> 25
++9: syscall fork -> 26
++8: syscall fork -> 27
++10: syscall fork -> 28
++8: syscall fork -> 29
++9: syscall fork -> 30
++9: syscall fork -> 31
++8: syscall fork -> 32
++9: syscall fork -> 33
++8: syscall fork -> 34
++9: syscall fork -> 35
++8: syscall fork -> 36
++8: syscall fork -> 37
++9: syscall fork -> 38
++10: syscall fork -> 39
++10: syscall fork -> 40
++8: syscall fork -> 41
++9: syscall fork -> 42
++8: syscall fork -> 43
++9: syscall fork -> 44
++8: syscall fork -> 45
++9: syscall fork -> 46
++10: syscall fork -> 47
++8: syscall fork -> 48
++9: syscall fork -> 49
++8: syscall fork -> 50
++9: syscall fork -> 51
++9: syscall fork -> 52
++8: syscall fork -> 53
++9: syscall fork -> 54
++8: syscall fork -> 55
++9: syscall fork -> 56
++8: syscall fork -> 57
++10: syscall fork -> 58
++8: syscall fork -> 59
++9: syscall fork -> 60
++8: syscall fork -> 61
++9: syscall fork -> 62
++8: syscall fork -> 63
++9: syscall fork -> 64
++9: syscall fork -> 65
++8: syscall fork -> 66
++8: syscall fork -> 67
++9: syscall fork -> -1
++8: syscall fork -> -1
++11: syscall fork -> -1
++12: syscall fork -> -1
++OK
++ALL TESTS PASSED
++$ 
++$ trace 48 cat README
++68: syscall read -> 512
++xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
++Version 6 (v6).  xv6 loosely follows the structure and style of v6,
++but is implemented for a modern RISC-V multiprocessor using ANSI C.
++
++ACKNOWLEDGMENTS
++
++xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
++to Peer Communications; ISBN: 1-57398-013-7; 1st edition (June 14,
++2000)).  See also https://pdos.csail.mit.edu/6.1810/, which provides
++pointers to on-line resources for v6.
++
++The following people have made contribution68: syscall read -> 512
++s: Russ Cox (context switching,
++locking), Cliff Frey (MP), Xiao Yu (MP), Nickolai Zeldovich, and Austin
++Clements.
++
++We are also grateful for the bug reports and patches contributed by
++Abhinavpatel00, Takahiro Aoyagi, Marcelo Arroyo, Hirbod Behnam, Silas
++Boyd-Wickizer, Anton Burtsev, carlclone, Ian Chen, clivezeng, Dan
++Cross, Cody Cutler, Mike CAT, Tej Chajed, Asami Doi,Wenyang Duan,
++echtwerner, eyalz800, Nelson Elhage, Saar Ettinger, Alice Ferrazzi,
++Nathaniel Filardo, flespark, Peter Froehlich, Yakir Goaron,68: syscall read -> 512
++ Shivam
++Handa, Matt Harvey, Bryan Henry, jaichenhengjie, Jim Huang, Matúš
++Jókay, John Jolly, Alexander Kapshuk, Anders Kaseorg, kehao95,
++Wolfgang Keller, Jungwoo Kim, Jonathan Kimmitt, Eddie Kohler, Vadim
++Kolontsov, Austin Liew, l0stman, Pavan Maddamsetti, Imbar Marinescu,
++Yandong Mao, Matan Shabtay, Hitoshi Mitake, Carmi Merimovich,
++mes900903, Mark Morrissey, mtasm, Joel Nider, Hayato Ohhashi,
++OptimisticSide, papparapa, phosphagos, Harry Porter, Greg Price, Zheng
++qhuo, Quancheng, RayAndrew, Jude Rich, s68: syscall read -> 512
++egfault, Ayan Shafqat, Eldar
++Sehayek, Yongming Shen, Fumiya Shigemitsu, snoire, Taojie, Cam Tenny,
++tyfkda, Warren Toomey, Stephen Tu, Alissa Tung, Rafael Ubal, unicornx,
++Amane Uehara, Pablo Ventura, Luc Videau, Xi Wang, WaheedHafez, Keiichi
++Watanabe, Lucas Wolf, Nicolas Wolovick, wxdao, Grant Wu, x653, Andy
++Zhang, Jindong Zhang, Icenowy Zheng, ZhUyU1997, and Zou Chang Wei.
++
++ERROR REPORTS
++
++Please send errors and suggestions to Frans Kaashoek and Robert Morris
++(kaashoek,rtm@mit.edu).  The main purpose of xv6 68: syscall read -> 377
++is as a teaching
++operating system for MIT's 6.1810, so we are more interested in
++simplifications and clarifications than new features.
++
++BUILDING AND RUNNING XV6
++
++You will need a RISC-V "newlib" tool chain from
++https://github.com/riscv/riscv-gnu-toolchain, and qemu compiled for
++riscv64-softmmu.  Once they are installed, and in your shell
++search path, you can run "make qemu".
++68: syscall read -> 0
++$ 
++$ trace 0xFFFFFFFF echo hi
++hi
++$
++$ trace
++Usage: trace mask command [args...]
++$ 
++$ trace 32 sh -c "cat README"
++71: syscall read -> 1
++$ 
++71: syscall read -> 1
++$ 
++71: syscall read -> 1
++$ 
++71: syscall read -> 1
++$ QEMU: Terminated
++
+\ No newline at end of file
+diff --git a/xv6-A1/Makefile b/xv6-A1/Makefile
+index 2cb84d5..3af0c8f 100644
+--- a/xv6-A1/Makefile
++++ b/xv6-A1/Makefile
+@@ -125,7 +125,6 @@ mkfs/mkfs: mkfs/mkfs.c $K/fs.h $K/param.h
+ UPROGS=\
+ 	$U/_cat\
+ 	$U/_echo\
+-	$U/_find\
+ 	$U/_forktest\
+ 	$U/_grep\
+ 	$U/_init\
+@@ -143,6 +142,11 @@ UPROGS=\
+ 	$U/_logstress\
+ 	$U/_forphan\
+ 	$U/_dorphan\
++	$U/_find\
++	$U/_primes\
++	$U/_trace
++
++# CMPT 332 Nandish Jha NAJ474 11282001 2025 change
+ 
+ fs.img: mkfs/mkfs README $(UPROGS)
+ 	mkfs/mkfs fs.img README $(UPROGS)
+diff --git a/xv6-A1/kernel/proc.c b/xv6-A1/kernel/proc.c
+index 9d6cf3f..509bb3e 100644
+--- a/xv6-A1/kernel/proc.c
++++ b/xv6-A1/kernel/proc.c
+@@ -286,6 +286,8 @@ kfork(void)
+   np->cwd = idup(p->cwd);
+ 
+   safestrcpy(np->name, p->name, sizeof(p->name));
++  
++  np->trace_mask = p->trace_mask; /* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
+ 
+   pid = np->pid;
+ 
+diff --git a/xv6-A1/kernel/proc.h b/xv6-A1/kernel/proc.h
+index d021857..d7b4799 100644
+--- a/xv6-A1/kernel/proc.h
++++ b/xv6-A1/kernel/proc.h
+@@ -104,4 +104,5 @@ struct proc {
+   struct file *ofile[NOFILE];  // Open files
+   struct inode *cwd;           // Current directory
+   char name[16];               // Process name (debugging)
++  uint64 trace_mask; /* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
+ };
+diff --git a/xv6-A1/kernel/syscall.c b/xv6-A1/kernel/syscall.c
+index 076d965..dfe9747 100644
+--- a/xv6-A1/kernel/syscall.c
++++ b/xv6-A1/kernel/syscall.c
+@@ -101,6 +101,7 @@ extern uint64 sys_unlink(void);
+ extern uint64 sys_link(void);
+ extern uint64 sys_mkdir(void);
+ extern uint64 sys_close(void);
++extern uint64 sys_trace(void); /* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
+ 
+ // An array mapping syscall numbers from syscall.h
+ // to the function that handles the system call.
+@@ -126,6 +127,33 @@ static uint64 (*syscalls[])(void) = {
+ [SYS_link]    sys_link,
+ [SYS_mkdir]   sys_mkdir,
+ [SYS_close]   sys_close,
++[SYS_trace]   sys_trace, /* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
++};
++
++/* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
++static char *syscall_names[] = {
++  [SYS_fork]    = "fork",
++  [SYS_exit]    = "exit",
++  [SYS_wait]    = "wait",
++  [SYS_pipe]    = "pipe",
++  [SYS_read]    = "read",
++  [SYS_kill]    = "kill",
++  [SYS_exec]    = "exec",
++  [SYS_fstat]   = "fstat",
++  [SYS_chdir]   = "chdir",
++  [SYS_dup]     = "dup",
++  [SYS_getpid]  = "getpid",
++  [SYS_sbrk]    = "sbrk",
++  [SYS_pause]   = "pause",
++  [SYS_uptime]  = "uptime",
++  [SYS_open]    = "open",
++  [SYS_write]   = "write",
++  [SYS_mknod]   = "mknod",
++  [SYS_unlink]  = "unlink",
++  [SYS_link]    = "link",
++  [SYS_mkdir]   = "mkdir",
++  [SYS_close]   = "close",
++  [SYS_trace]   = "trace", /* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
+ };
+ 
+ void
+@@ -136,9 +164,16 @@ syscall(void)
+ 
+   num = p->trapframe->a7;
+   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+-    // Use num to lookup the system call function for num, call it,
+-    // and store its return value in p->trapframe->a0
+-    p->trapframe->a0 = syscalls[num]();
++    /* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
++    uint64 ret = syscalls[num]();
++    p->trapframe->a0 = ret;
++    if(p->trace_mask & (1 << num)) {
++      if(num < NELEM(syscall_names) && syscall_names[num]) {
++        printf("%d: syscall %s -> %d\n", p->pid, syscall_names[num], (int)ret);
++      } else {
++        printf("%d: syscall %d -> %d\n", p->pid, num, (int)ret);
++      }
++    }
+   } else {
+     printf("%d %s: unknown sys call %d\n",
+             p->pid, p->name, num);
+diff --git a/xv6-A1/kernel/syscall.h b/xv6-A1/kernel/syscall.h
+index 3dd926d..c9e9af1 100644
+--- a/xv6-A1/kernel/syscall.h
++++ b/xv6-A1/kernel/syscall.h
+@@ -20,3 +20,4 @@
+ #define SYS_link   19
+ #define SYS_mkdir  20
+ #define SYS_close  21
++#define SYS_trace  22 /* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
+diff --git a/xv6-A1/kernel/sysproc.c b/xv6-A1/kernel/sysproc.c
+index 3044d00..2dffbb8 100644
+--- a/xv6-A1/kernel/sysproc.c
++++ b/xv6-A1/kernel/sysproc.c
+@@ -7,6 +7,17 @@
+ #include "proc.h"
+ #include "vm.h"
+ 
++/* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
++uint64
++sys_trace(void)
++{
++  int mask;
++  argint(0, &mask);
++  struct proc *p = myproc();
++  p->trace_mask = mask;
++  return 0;
++}
++
+ uint64
+ sys_exit(void)
+ {
+diff --git a/xv6-A1/user/find.c b/xv6-A1/user/find.c
+index d5ec860..75a3d6c 100644
+--- a/xv6-A1/user/find.c
++++ b/xv6-A1/user/find.c
+@@ -24,27 +24,60 @@ find(char *path, char *target)
+ 	}
+ 
+ 	/* Get file/directory information using fstat */
+-	if(fstat(fd, &st) < 0) {
++	if(fstat(fd, &st) < 0)
++    {
+ 		printf("find: cannot stat %s\n", path);
+ 		close(fd);
+ 		return;
+ 	}
+ 
+-	/* Check if path is a regular file */
+-	if(st.type == T_FILE) {
+-		printf("Found file: %s\n", path);
+-	} 
+-	/* Check if path is a directory */
+-	else if(st.type == T_DIR) {
+-		printf("Directory entries in %s:\n", path);
+-		/* Read each directory entry */
+-		while(read(fd, &de, sizeof(de)) == sizeof(de)) {
+-			/* Skip empty directory entries */
+-			if(de.inum == 0)
+-				continue;
+-			printf("  %s\n", de.name);
+-		}
+-	}
++    if(st.type == T_FILE) /* Check if path is a regular file */
++    {
++        /* Extract the filename from the path */
++        char *filename = path;
++        for(int i = strlen(path) - 1; i >= 0; i--)
++        {
++            if(path[i] == '/')
++            {
++                filename = path + i + 1;
++                break;
++            }
++        }
++        /* Print only if filename matches target */
++        if(strcmp(filename, target) == 0)
++        {
++            printf("%s\n", path);
++        }
++    }
++    else if(st.type == T_DIR)
++    {
++        /* Buffer for building new paths */
++        char buf[512], *p;
++        /* printf("Directory entries in %s:\n", path); */
++        /* Read each directory entry */
++        while(read(fd, &de, sizeof(de)) == sizeof(de))
++        {
++            /* Skip empty directory entries */
++            if(de.inum == 0)
++                    continue;
++            /* Skip "." and ".." to avoid infinite recursion */
++            if(strcmp(de.name, ".") == 0 || strcmp(de.name, "..") == 0)
++                    continue;
++            /* Build the new path for the entry */
++            if(strlen(path) + 1 + DIRSIZ + 1 > sizeof(buf))
++            {
++                /* Path too long, skip */
++                continue;
++            }
++            strcpy(buf, path);
++            p = buf + strlen(buf);
++            *p++ = '/';
++            memmove(p, de.name, DIRSIZ);
++            p[DIRSIZ] = 0;
++            /* Recursively call find on the new path */
++            find(buf, target);
++        }
++    }
+ 	/* Close the file descriptor */
+ 	close(fd);
+ }
+diff --git a/xv6-A1/user/primes.c b/xv6-A1/user/primes.c
+new file mode 100644
+index 0000000..bc1f89e
+--- /dev/null
++++ b/xv6-A1/user/primes.c
+@@ -0,0 +1,73 @@
++/*
++AAKASH JANA AAJ284 11297343
++NANDISH JHA NAJ474 11282001
++*/
++#include "kernel/types.h"
++#include "user/user.h"
++
++/* Recursive sieve function: reads from read_fd, prints first prime, sets up next sieve */
++void sieve(int read_fd)
++{
++    int prime;
++    /* Read the first number (prime) from the pipe */
++    if(read(read_fd, &prime, sizeof(prime)) <= 0)
++    {
++        close(read_fd);
++        return; /* Explicit return to terminate recursion */
++    }
++    printf("prime %d\n", prime);
++
++    int p[2];
++    pipe(p);
++    int pid = fork();
++    if(pid == 0)
++    {
++        /* Child: next sieve stage */
++        close(p[1]);
++        sieve(p[0]);
++        exit(0);
++    }
++    else
++    {
++        /* Parent: filter and pass non-multiples to next pipe */
++        close(p[0]);
++        int num;
++        while(read(read_fd, &num, sizeof(num)) > 0)
++        {
++            if(num % prime != 0)
++            {
++                write(p[1], &num, sizeof(num));
++            }
++        }
++        close(read_fd);
++        close(p[1]);
++        wait(0);
++        exit(0);
++    }
++}
++
++int main(void)
++{
++    int p[2];
++    pipe(p);
++    int pid = fork();
++    if(pid == 0)
++    {
++        /* Child: start sieve */
++        close(p[1]);
++        sieve(p[0]);
++        exit(0);
++    }
++    else
++    {
++        /* Parent: write numbers 2..35 to pipe */
++        close(p[0]);
++        for(int i = 2; i <= 35; i++)
++        {
++            write(p[1], &i, sizeof(i));
++        }
++        close(p[1]);
++        wait(0);
++    }
++    exit(0);
++}
+diff --git a/xv6-A1/user/trace.c b/xv6-A1/user/trace.c
+new file mode 100644
+index 0000000..f1fff59
+--- /dev/null
++++ b/xv6-A1/user/trace.c
+@@ -0,0 +1,21 @@
++// AAKASH JANA AAJ284 11297343
++// NANDISH JHA NAJ474 11282001
++
++/* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
++
++// Minimal trace.c for xv6 assignment
++#include "user.h"
++
++int main(int argc, char *argv[])
++{
++    if(argc < 3){
++        fprintf(2, "Usage: trace mask command [args...]\n");
++        exit(1);
++    }
++    int mask = atoi(argv[1]);
++    trace(mask);
++    exec(argv[2], &argv[2]);
++    // If exec fails
++    fprintf(2, "exec failed\n");
++    exit(1);
++}
+diff --git a/xv6-A1/user/user.h b/xv6-A1/user/user.h
+index ac84de9..dfdbf18 100644
+--- a/xv6-A1/user/user.h
++++ b/xv6-A1/user/user.h
+@@ -1,5 +1,6 @@
+ #define SBRK_ERROR ((char *)-1)
+ 
++typedef unsigned int uint; /* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
+ struct stat;
+ 
+ // system calls
+@@ -24,6 +25,7 @@ int getpid(void);
+ char* sys_sbrk(int,int);
+ int pause(int);
+ int uptime(void);
++int trace(int mask); /* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */
+ 
+ // ulib.c
+ int stat(const char*, struct stat*);
+diff --git a/xv6-A1/user/usys.pl b/xv6-A1/user/usys.pl
+index c5d4c3a..705614c 100644
+--- a/xv6-A1/user/usys.pl
++++ b/xv6-A1/user/usys.pl
+@@ -42,3 +42,4 @@ entry("getpid");
+ entry("sbrk");
+ entry("pause");
+ entry("uptime");
++entry("trace"); # CMPT 332 Nandish Jha NAJ474 11282001 2025 change

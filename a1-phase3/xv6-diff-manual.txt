@@ -1,0 +1,122 @@
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+
+# xv6-diff-manual.txt
+Manual summary of all changes and new code for Part E (System Call Tracing)
+in xv6-A1
+
+---
+
+## 1. Kernel Changes
+
+### a. kernel/proc.h
+- Added `uint64 trace_mask;` to `struct proc` to store the syscall trace
+  bitmask. Commented with assignment info for traceability.
+
+### b. kernel/proc.c
+- In `kfork`, added `np->trace_mask = p->trace_mask;` so child inherits
+  parent's trace mask.
+- No changes to process allocation or freeing logic except for mask
+  inheritance.
+
+### c. kernel/syscall.h
+- Added `#define SYS_trace 22` for the new trace syscall number, with
+  assignment comment.
+
+### d. kernel/sysproc.c
+- Implemented `uint64 sys_trace(void)`:
+  - Uses `argint(0, &mask);` to get the mask argument from user.
+  - Sets `myproc()->trace_mask = mask;` to enable tracing.
+  - Returns 0.
+
+### e. kernel/syscall.c
+- Added `extern uint64 sys_trace(void);` to syscall prototypes.
+- Added `[SYS_trace] sys_trace,` to the `syscalls[]` array so the kernel can
+  handle the trace syscall.
+- Added `[SYS_trace] = "trace",` to the `syscall_names[]` array for name
+  mapping.
+- In the syscall handler:
+  - After syscall execution, checks `if(p->trace_mask & (1 << num))`.
+  - If enabled, prints trace output: `printf("%d: syscall %s -> %d\n", p->pid,
+    syscall_names[num], (int)ret);`
+  - If syscall name is unmapped, prints syscall number instead.
+
+---
+
+## 2. User Changes
+
+### a. user/user.h
+- Added `int trace(int mask);` prototype for the user syscall.
+- Added `typedef unsigned int uint;` for compatibility with kernel/user code.
+
+### b. user/usys.pl
+- Added `entry("trace");` to generate the syscall stub for trace.
+
+### c. user/trace.c (new file)
+- New user program:
+  - Checks for at least 3 arguments.
+  - Parses mask with `atoi(argv[1])`.
+  - Calls `trace(mask);` syscall.
+  - Executes target command with `exec(argv[2], &argv[2]);`.
+  - Prints usage or error if arguments are missing or exec fails.
+  - No extra output except error handling.
+
+---
+
+## 3. Makefile
+- Added `$U/_trace` to the `UPROGS` list so the trace user program is included
+  in the xv6 image and built automatically.
+
+---
+
+## 4. Documentation
+- Created `partE.design.txt` and `partE.testplan.txt` for design and testing
+  documentation, following previous part D format.
+
+---
+
+## 5. Minor Details
+- All changes are commented with
+      `/* CMPT 332 Nandish Jha NAJ474 11282001 2025 change */`
+  for traceability.
+- All new/changed code follows xv6 style and conventions.
+- Error handling in `trace.c` for invalid arguments and exec failure.
+- Mask is inherited on fork, so tracing applies to child processes.
+- Syscall tracing only prints for enabled syscalls, using the mask.
+- If a syscall number is not mapped, prints the number instead of the name.
+
+---
+
+## 6. Files Changed or Added
+- kernel/proc.h
+- kernel/proc.c
+- kernel/syscall.h
+- kernel/sysproc.c
+- kernel/syscall.c
+- user/user.h
+- user/usys.pl
+- user/trace.c (new)
+- Makefile
+- partE.design.txt (new)
+- partE.testplan.txt (new)
+
+---
+
+## How It Works
+- User calls `trace <mask> <command> [args...]`.
+- Kernel sets `trace_mask` for the process.
+- When the process (and its children) make syscalls, the kernel prints trace
+  output for enabled syscalls.
+
+---
+
+## Edge Cases and Error Handling
+- If an unmapped syscall is traced, prints syscall number instead of name.
+- If arguments are missing, user program prints usage and exits.
+- Mask is inherited on fork.
+- Trace output only appears for enabled syscalls.
+
+---
+
+This manual file summarizes all changes and new code for Part E, including all
+  minor and major details, suitable for assignment submission.

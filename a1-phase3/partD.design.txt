@@ -1,0 +1,144 @@
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+
+Part D: Design Document for xv6 User Program (find)
+====================================================
+
+Overview:
+---------
+The `find` program recursively searches a directory tree for files with a
+   specific name, printing the full path of each match. It mimics the basic
+   functionality of the UNIX `find` command, implemented for the xv6
+   operating system.
+
+Design Steps:
+-------------
+1. **Argument Parsing**
+   - The program expects two arguments: the starting directory path and the
+      target filename.
+   - If the arguments are incorrect, it prints a usage message and exits.
+
+2. **Recursive Search Function (`find`)**
+   - The main logic is implemented in a recursive function
+         `find(path, target)`.
+   - For each call:
+     - Opens the given path.
+     - Uses `fstat` to determine if the path is a file or directory.
+
+3. **File Handling**
+   - If the path is a file:
+     - Extracts the filename from the path.
+     - Compares it to the target name using `strcmp`.
+     - If it matches, prints the full path.
+
+4. **Directory Handling and Recursion**
+   - If the path is a directory:
+     - Reads each entry using `read` and `struct dirent`.
+     - Skips entries with `inum == 0` (empty slots).
+     - Skips "." and ".." to avoid infinite recursion.
+     - Builds the full path for each entry by appending the entry name to the
+         current path.
+     - Recursively calls `find` on each entry.
+
+5. **Path Construction**
+   - Uses a buffer to construct new paths for recursive calls.
+   - Ensures buffer size is sufficient to avoid overflow.
+
+6. **Output**
+   - Only prints the full path of files that match the target filename.
+   - Output format matches assignment requirements (e.g, ./b, ./a/b, ./a/aa/b).
+
+7. **Error Handling**
+   - Handles errors for opening and stating files/directories.
+   - Skips entries or prints error messages as appropriate.
+
+References:
+-----------
+- Used `ls.c` from xv6 as a reference for directory reading and path
+   construction.
+- Used C string functions (`strcpy`, `strlen`, `strcmp`, etc.) for path and
+   name handling.
+
+Testing:
+--------
+- Tested with nested directories and files to ensure correct recursive search
+   and output.
+- Verified output matches assignment requirements.
+
+Notes:
+------
+- The program is designed to be simple and robust, following xv6 conventions
+   and constraints.
+- All code is commented for clarity and maintainability.
+
+==========================================================
+==========================================================
+==========================================================
+
+
+
+Part D BONUS: Design Document for xv6 User Program (primes)
+==========================================================
+
+Overview:
+---------
+The `primes` program implements a concurrent prime sieve using pipes and
+   processes, inspired by Doug McIlroy's Unix pipeline concept. It finds all
+   prime numbers between 2 and 35 by setting up a chain of processes, each
+   responsible for filtering multiples of a discovered prime.
+
+Design Steps:
+-------------
+1. **Pipeline Initialization**
+   - The main process creates a pipe and forks a child.
+   - The parent writes numbers 2 through 35 into the pipe, then waits for the
+      child to finish.
+   - The child starts the sieve process by reading from the pipe.
+
+2. **Recursive Sieve Function**
+   - The sieve function reads the first number from its input pipe; this is the
+      next prime.
+   - It prints the prime.
+   - It creates a new pipe and forks a child for the next sieve stage.
+   - The parent reads remaining numbers, filters out multiples of its prime,
+      and writes the rest to the new pipe.
+   - The child recursively calls the sieve function on the new pipe.
+   - The recursion terminates when there are no more numbers to read from the
+      pipe.
+
+3. **Process and Pipe Management**
+   - Each sieve stage is a separate process, connected by pipes.
+   - File descriptors are closed as soon as they are no longer needed to avoid
+      resource exhaustion.
+   - The parent waits for its child to finish before exiting, ensuring all
+      processes terminate cleanly.
+
+4. **Output**
+   - Each process prints its prime in the format: `prime <number>`.
+   - The output matches the assignment requirements, listing all primes between
+      2 and 35.
+
+5. **Error Handling and Termination**
+   - The base case for recursion is when the pipe is empty; the process closes
+      its file descriptor and returns.
+   - All processes exit cleanly after their work is done.
+
+References:
+-----------
+- The design is based on the classic Unix pipeline prime sieve, as described in
+   MIT's xv6 assignment and Doug McIlroy's original concept.
+- Used xv6 system calls: `pipe`, `fork`, `read`, `write`, `close`, `wait`, and
+   `exit`.
+
+Testing:
+--------
+- Verified that the output matches the expected list of primes.
+- Checked that all processes terminate and no file descriptor/resource leaks
+   occur.
+
+Notes:
+------
+- The recursive structure is elegant and matches the conceptual model of a
+   pipeline of filters.
+- An explicit return in the base case is used to help the compiler recognize
+   recursion termination.

@@ -1,0 +1,49 @@
+Nandish Jha NAJ474 11282001
+Aakash Jana AAJ284 11297343
+
+# partA1.testplan.txt
+
+## Overview
+This test plan covers the functionality and robustness of partA1, which implements multi-threading using Windows threads. The program creates a parent thread that spawns multiple child threads, each performing square calculations for a given size and deadline.
+
+## Test Cases
+
+### 1. Basic Functionality
+- **Input:** 4 threads, deadline 5 seconds, size 10
+- **Expected:** All threads created and started; each thread completes square calculations; parent waits for deadline; all threads closed; summary printed.
+
+### 2. Minimum Input
+- **Input:** 1 thread, deadline 1 second, size 1
+- **Expected:** Single thread created and started; completes calculations; parent waits for deadline; thread closed; summary printed.
+
+### 3. Large Number of Threads
+- **Input:** 100 threads, deadline 5 seconds, size 50
+- **Expected:** All 100 threads created and started; each thread completes calculations; parent waits for deadline; all threads closed; summary printed.
+
+### 4. Edge Case: Maximum Allowed Threads
+- **Input:** Reasonable threads and deadline and size 10000
+- **Expected:** All threads created if system resources allow; program handles thread creation and closure gracefully.
+
+### 5. Edge Case: Invalid Arguments
+- **Input:** Negative or zero values for threads, deadline, or size
+- **Expected:** Program prints error and does not proceed.
+
+### 6. Edge Case: Deadline Exceeded
+- **Input:** Threads with long-running calculations and short deadline
+- **Expected:** Parent closes threads after deadline; summary reflects early termination.
+
+### 7. Input from File
+- **Input:** Multiple sets of arguments read from a file
+- **Expected:** Program processes each line, validates input, runs tests, and prints results for each.
+
+### 8. Thread Creation Failure
+- **Input:** Excessive threads or system resource exhaustion
+- **Expected:** Program prints error for failed thread creation and continues or exits gracefully.
+
+### 9. Output Verification
+- **Check:** Each thread prints creation, start, completion, and closure messages; parent prints summary and total elapsed time.
+
+## How to Run
+- Use keyboard input or file input as prompted by the program.
+- Validate output against expected results above.
+- Check for error handling and robustness in edge cases.

@@ -1,0 +1,42 @@
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+
+Part D BONUS: Test Plan for xv6 User Program (primes)
+====================================================
+
+Objective:
+----------
+Verify that the primes program correctly finds and prints all prime numbers
+   between 2 and 35 using a concurrent pipeline of processes and pipes.
+
+Test Cases:
+-----------
+1. **Basic Output Test**
+   - Run: primes
+   - Expected output:
+     prime 2
+     prime 3
+     prime 5
+     prime 7
+     prime 11
+     prime 13
+     prime 17
+     prime 19
+     prime 23
+     prime 29
+     prime 31
+
+2. **Resource Management Test**
+   - Run: primes
+   - Expected: All processes terminate, no resource leaks, xv6 does not run
+      out of file descriptors or processes.
+
+3. **Output Format Test**
+   - Run: primes
+   - Expected: Each line starts with "prime " followed by the prime number.
+
+Instructions:
+-------------
+- Run the program in xv6 using the shell command: primes
+- Observe and record the output for each test case.
+- Check for proper termination and absence of resource leaks.

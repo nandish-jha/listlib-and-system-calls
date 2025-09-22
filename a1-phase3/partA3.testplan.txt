@@ -1,0 +1,446 @@
+Nandish Jha NAJ474 11282001
+Aakash Jana AAJ284 11297343
+
+=======================================
+Part A3 Comprehensive Test Plan
+=======================================
+
+Overview:
+---------
+This test plan provides exhaustive testing coverage for Part A3, which
+implements a multi-threaded solution using POSIX pthreads (pthread library)
+to compute squares using a recursive algorithm. The implementation creates a
+parent thread that spawns multiple child threads using pthread_create(), each
+calling Square(N) for values 1 to N until a deadline is reached.
+
+Implementation Details:
+----------------------
+- Uses POSIX pthreads library with pthread_create() for thread creation
+- Parent thread created in main() function using pthread_create()
+- Child threads created by parent thread using pthread_create()
+- Global volatile flag 'keep_running' controls execution
+- Thread-local storage for current_thread identification
+- Timing measurements using gettimeofday() for microsecond precision
+- Memory allocation for pthread_t handles, IDs, and square counters
+- Thread termination using pthread_detach() for fire-and-forget behavior
+- Uses sleep() for timing delays (POSIX sleep function)
+
+Test Categories:
+================
+
+1. BASIC FUNCTIONALITY TESTS
+-----------------------------
+
+Test Case A3.1.1: Single Thread Configuration
+- Input: 1 thread, 2 second deadline, size 5
+- Purpose: Test single POSIX thread creation and execution
+- Expected Results:
+  * Single child thread created successfully using pthread_create()
+  * Thread completes multiple Square(1) to Square(5) iterations
+  * Proper timing measurements using gettimeofday()
+  * Clean thread termination using pthread_detach()
+  * Parent summary shows correct square call count
+
+Test Case A3.1.2: Standard Multi-Thread Configuration
+- Input: 4 threads, 5 second deadline, size 10
+- Purpose: Test typical POSIX pthread execution
+- Expected Results:
+  * All 4 child threads created with pthread_create() returning 0
+  * Each thread repeatedly loops through Square(1) to Square(10) until deadline
+  * Threads run concurrently for approximately 5 seconds
+  * keep_running flag properly stops execution after deadline
+  * Each thread reports elapsed time and total square call count
+  * Parent thread summary matches individual thread reports
+  * Square call count much higher than size (multiple complete loops)
+
+Test Case A3.1.3: Higher Thread Count
+- Input: 8 threads, 3 second deadline, size 15
+- Purpose: Test POSIX pthread scalability
+- Expected Results:
+  * All 8 threads created without pthread library errors
+  * Concurrent execution without thread interference
+  * Proper resource management through POSIX library
+  * No pthread handle conflicts or memory issues
+
+2. POSIX PTHREAD-SPECIFIC TESTS
+-------------------------------
+
+Test Case A3.2.1: pthread_create() Function Verification
+- Input: 6 threads, 4 second deadline, size 12
+- Purpose: Test POSIX-specific thread creation parameters
+- Expected Results:
+  * pthread_create() with ChildThreadFunction succeeds (returns 0)
+  * NULL attributes use default thread settings
+  * Function pointer ChildThreadFunction passed correctly
+  * Arguments passed through args array properly
+  * pthread_t handles stored correctly
+
+Test Case A3.2.2: pthread_detach() Function Verification
+- Input: 3 threads, 6 second deadline, size 20
+- Purpose: Test POSIX-specific thread detachment
+- Expected Results:
+  * pthread_detach() properly detaches threads
+  * No need for pthread_join() after detachment
+  * Clean resource cleanup through POSIX library
+  * Thread termination messages display correctly
+  * "Fire and forget" behavior implemented properly
+
+Test Case A3.2.3: POSIX sleep() Function Accuracy
+- Input: 2 threads, 10 second deadline, size 8
+- Purpose: Test POSIX sleep() timing accuracy
+- Expected Results:
+  * sleep(deadline) provides accurate timing
+  * Parent sleeps for exact deadline duration
+  * Child thread sleep(1) provides proper initialization delay
+  * Timing measurements remain consistent with POSIX timing
+
+3. BOUNDARY AND EDGE CASE TESTS
+--------------------------------
+
+Test Case A3.3.1: Minimum Boundary Values
+- Input: 1 thread, 1 second deadline, size 1
+- Purpose: Test absolute minimum valid parameters
+- Expected Results:
+  * Single thread executes Square(1) repeatedly for 1 second
+  * POSIX library handles minimal configuration properly
+  * Accurate timing measurements with gettimeofday()
+  * Proper initialization and cleanup
+
+Test Case A3.3.2: High Thread Count Boundary
+- Input: 100 threads, 8 second deadline, size 50
+- Purpose: Test POSIX library with higher thread counts
+- Expected Results:
+  * POSIX library handles moderate thread counts properly
+  * No memory allocation failures within reasonable limits
+  * Proper resource cleanup
+  * System remains stable throughout execution
+
+Test Case A3.3.3: Quick Deadline Test
+- Input: 5 threads, 1 second deadline, size 1000
+- Purpose: Test behavior with very short execution time
+- Expected Results:
+  * Threads start but may not complete many iterations
+  * keep_running flag properly stops execution quickly
+  * All threads terminate within deadline + cleanup time
+  * pthread_detach() handles rapid termination
+
+Test Case A3.3.4: Extended Execution Test
+- Input: 3 threads, 60 second deadline, size 100
+- Purpose: Test extended execution stability with POSIX
+- Expected Results:
+  * Stable execution for full 60 seconds
+  * POSIX library maintains thread integrity
+  * Consistent square call counting over time
+  * No POSIX-related memory leaks or resource exhaustion
+
+4. ERROR HANDLING AND VALIDATION TESTS
+---------------------------------------
+
+Test Case A3.4.1: Invalid Thread Count - Zero
+- Input: 0 threads, 5 second deadline, size 10
+- Purpose: Test input validation for thread count
+- Expected Results:
+  * Program displays error message about thread count range
+  * Program exits with error message
+  * No pthread_create() calls attempted
+
+Test Case A3.4.2: Invalid Thread Count - Negative
+- Input: -3 threads, 5 second deadline, size 10
+- Purpose: Test negative thread count handling
+- Expected Results:
+  * Program displays error message about valid range
+  * Program exits with error message
+  * POSIX library not invoked
+
+Test Case A3.4.3: Invalid Thread Count - Excessive
+- Input: 1001 threads, 5 second deadline, size 10
+- Purpose: Test upper bound validation
+- Expected Results:
+  * Program displays error message about maximum thread limit
+  * Program exits with error message
+
+Test Case A3.4.4: Invalid Deadline - Zero
+- Input: 4 threads, 0 second deadline, size 10
+- Purpose: Test deadline validation
+- Expected Results:
+  * Program displays error message about deadline range
+  * Program exits with error message
+
+Test Case A3.4.5: Invalid Deadline - Negative
+- Input: 4 threads, -2 second deadline, size 10
+- Purpose: Test negative deadline handling
+- Expected Results:
+  * Program displays error message
+  * Program exits with error message
+
+Test Case A3.4.6: Invalid Deadline - Excessive
+- Input: 4 threads, 121 second deadline, size 10
+- Purpose: Test upper deadline bound
+- Expected Results:
+  * Program displays error message about maximum deadline
+  * Program exits with error message
+
+Test Case A3.4.7: Invalid Size - Zero
+- Input: 4 threads, 5 second deadline, size 0
+- Purpose: Test size parameter validation
+- Expected Results:
+  * Program displays error message about size range
+  * Program exits with error message
+
+Test Case A3.4.8: Invalid Size - Negative
+- Input: 4 threads, 5 second deadline, size -5
+- Purpose: Test negative size handling
+- Expected Results:
+  * Program displays error message
+  * Program exits with error message
+
+Test Case A3.4.9: Invalid Size - Excessive
+- Input: 4 threads, 5 second deadline, size 10001
+- Purpose: Test upper size bound
+- Expected Results:
+  * Program displays error message about maximum size
+  * Program exits with error message
+
+Test Case A3.4.10: pthread_create() Failure Simulation
+- Input: Very high thread count to trigger pthread_create() failure
+- Purpose: Test handling of pthread_create() failures
+- Expected Results:
+  * Program detects pthread_create() returning non-zero
+  * Appropriate error message displayed for failed thread creation
+  * Program exits with error message
+  * Partial thread cleanup if some threads created successfully
+
+Test Case A3.4.11: Insufficient Arguments
+- Input: ./partA3 4 5 (missing size parameter)
+- Purpose: Test argument count validation
+- Expected Results:
+  * Program displays "Error: Expecting 3 arguments"
+  * Program exits with error message
+
+Test Case A3.4.12: Memory Allocation Failure
+- Input: Large thread count that exhausts memory
+- Purpose: Test memory allocation failure handling
+- Expected Results:
+  * Program detects malloc() returning NULL
+  * Displays "Memory Allocation failed"
+  * Program exits with error message
+
+5. MEMORY AND RESOURCE MANAGEMENT TESTS
+----------------------------------------
+
+Test Case A3.5.1: POSIX Memory Allocation Stress Test
+- Input: 100 threads, 10 second deadline, size 50
+- Purpose: Test memory allocation with POSIX threads
+- Expected Results:
+  * All pthread_t allocations succeed
+  * Default stack space allocated properly for each thread
+  * No memory leaks in POSIX thread management
+  * Proper cleanup of all POSIX resources
+
+Test Case A3.5.2: Repeated Execution Test
+- Input: Run same configuration 10 times consecutively
+- Purpose: Test for POSIX library memory leaks
+- Expected Results:
+  * Each run executes successfully
+  * No accumulation of POSIX thread resources
+  * Consistent memory usage across runs
+  * POSIX library maintains stability
+
+Test Case A3.5.3: Resource Cleanup Verification
+- Input: 12 threads, 4 second deadline, size 25
+- Purpose: Verify proper POSIX resource cleanup
+- Expected Results:
+  * All threads properly detached with pthread_detach()
+  * No zombie threads remain after execution
+  * Memory allocated for pthread_t handles, args, counters freed
+  * POSIX library resources properly released
+
+6. TIMING AND SYNCHRONIZATION TESTS
+------------------------------------
+
+Test Case A3.6.1: gettimeofday() Timing Accuracy
+- Input: 4 threads, 5 second deadline, size 10
+- Purpose: Verify timing measurement accuracy with POSIX
+- Expected Results:
+  * gettimeofday() provides microsecond precision
+  * Thread timing calculations accurate to milliseconds
+  * Parent thread timing matches deadline duration
+  * Total program time includes POSIX thread overhead
+
+Test Case A3.6.2: Thread Synchronization Verification
+- Input: 6 threads, 8 second deadline, size 30
+- Purpose: Test POSIX thread synchronization
+- Expected Results:
+  * All threads start execution nearly simultaneously
+  * keep_running flag affects all threads consistently
+  * Thread timing measurements show concurrent execution
+  * No race conditions in square counter updates
+
+Test Case A3.6.3: Deadline Precision Test
+- Input: 3 threads, 7 second deadline, size 20
+- Purpose: Test deadline timing precision with POSIX sleep()
+- Expected Results:
+  * Parent sleeps for exactly 7 seconds
+  * Child threads stop within 100ms of deadline
+  * Total execution time close to deadline + cleanup
+  * POSIX sleep() function provides accurate delays
+
+7. PTHREAD LIFECYCLE TESTS
+---------------------------
+
+Test Case A3.7.1: POSIX Thread Creation Lifecycle
+- Input: 4 threads, 5 second deadline, size 15
+- Purpose: Verify POSIX thread creation process
+- Expected Results:
+  * pthread_create() function calls succeed
+  * ChildThreadFunction executes properly
+  * Arguments passed through args array correctly
+  * pthread_t handles managed correctly
+
+Test Case A3.7.2: POSIX Thread Execution Lifecycle
+- Input: 4 threads, 4 second deadline, size 12
+- Purpose: Verify POSIX thread execution behavior
+- Expected Results:
+  * Threads start with proper argument passing
+  * current_thread variable set correctly in each thread
+  * Square() function called with proper thread context
+  * Thread execution continues until keep_running = 0
+  * Return NULL executed properly at thread completion
+
+Test Case A3.7.3: POSIX Thread Termination Lifecycle
+- Input: 7 threads, 3 second deadline, size 18
+- Purpose: Verify POSIX thread termination process
+- Expected Results:
+  * pthread_detach() called for each thread handle
+  * Threads terminate cleanly without corruption
+  * Thread termination messages display properly
+  * No lingering pthread processes or resources
+
+8. OUTPUT FORMAT AND MESSAGING TESTS
+-------------------------------------
+
+Test Case A3.8.1: POSIX-Specific Output Verification
+- Input: 3 threads, 5 second deadline, size 10
+- Purpose: Verify POSIX-specific output formatting
+- Expected Results:
+  * "Parent thread created successfully" message displays
+  * Child thread creation success messages properly formatted
+  * Thread execution messages with correct thread IDs
+  * Parent summary matches POSIX thread behavior
+
+Test Case A3.8.2: Error Message Verification
+- Input: Various invalid inputs and failure conditions
+- Purpose: Test POSIX-specific error messaging
+- Expected Results:
+  * "Failed to create child thread X" when pthread_create() fails
+  * Memory allocation failure messages
+  * Proper error codes returned for various failure modes
+
+9. INTEGRATION TESTS WITH POSIX LIBRARY
+----------------------------------------
+
+Test Case A3.9.1: POSIX Library Integration
+- Input: 6 threads, 8 second deadline, size 25
+- Purpose: Test full integration with POSIX pthreads
+- Expected Results:
+  * Seamless integration with POSIX pthread library
+  * Proper linking with standard pthread library (-lpthread)
+  * All POSIX-specific features work correctly
+  * No conflicts between POSIX and other libraries
+
+Test Case A3.9.2: Square Function Integration with POSIX
+- Input: 4 threads, 6 second deadline, size 20
+- Purpose: Verify Square() integration with POSIX threads
+- Expected Results:
+  * Square() function called correctly from POSIX threads
+  * Thread-local current_thread variable works with POSIX
+  * Square counter incremented properly in POSIX context
+  * No interference between POSIX threads calling Square()
+
+10. PERFORMANCE AND STRESS TESTS
+---------------------------------
+
+Test Case A3.10.1: POSIX Threading Performance
+- Input: 15 threads, 12 second deadline, size 40
+- Purpose: Test POSIX library performance under moderate load
+- Expected Results:
+  * POSIX threads created efficiently
+  * Good performance characteristics with standard library
+  * Minimal overhead from POSIX library
+  * Stable performance throughout execution
+
+Test Case A3.10.2: POSIX Resource Management Test
+- Input: 30 threads, 10 second deadline, size 30
+- Purpose: Test POSIX behavior with multiple threads
+- Expected Results:
+  * POSIX library handles multiple threads gracefully
+  * Fair scheduling among POSIX threads
+  * No deadlocks or race conditions in POSIX context
+  * Proper resource management
+
+Test Case A3.10.3: Thread Stack Overflow Prevention
+- Input: 10 threads, 20 second deadline, size 500
+- Purpose: Test POSIX default stack handling
+- Expected Results:
+  * Default stack size sufficient for Square() recursion
+  * No stack overflow errors with deep recursion
+  * Proper stack management by POSIX library
+  * Consistent performance across all threads
+
+11. POSIX COMPLIANCE TESTS
+---------------------------
+
+Test Case A3.11.1: POSIX Standard Compliance
+- Input: 8 threads, 10 second deadline, size 30
+- Purpose: Verify POSIX standard compliance
+- Expected Results:
+  * pthread_create() behavior matches POSIX specification
+  * pthread_detach() behavior matches POSIX standard
+  * Thread creation/termination follows POSIX semantics
+  * Error handling consistent with POSIX requirements
+
+Test Case A3.11.2: Thread Local Storage Compliance
+- Input: 5 threads, 6 second deadline, size 25
+- Purpose: Test __thread storage class with POSIX
+- Expected Results:
+  * __thread current_thread variable isolated per thread
+  * No interference between thread-local variables
+  * Proper initialization of thread-local storage
+  * Consistent behavior across POSIX thread lifetime
+
+Testing Environment:
+====================
+- Platform: Linux with POSIX pthread library support
+- Compiler: GCC with POSIX thread support (-pthread flag)
+- Required Libraries: Standard libpthread (linked with -lpthread)
+- Memory: Sufficient for default POSIX thread stack allocation
+- Execution: Standard POSIX-compliant Linux environment
+
+Test Execution Strategy:
+========================
+1. Verify POSIX pthread library availability and linking
+2. Test basic POSIX functionality before complex scenarios  
+3. Validate POSIX-specific features (pthread_create, pthread_detach)
+4. Test error handling with POSIX library failures
+5. Perform stress testing within POSIX library limits
+6. Verify proper POSIX resource cleanup and compliance
+
+Expected Results Documentation:
+==============================
+- Record POSIX library version and system information
+- Document all POSIX-specific function calls and returns
+- Note any POSIX library limitations encountered
+- Record performance characteristics of POSIX threads
+- Document memory usage with POSIX library
+- Record any POSIX-specific error conditions
+
+Test Completion Criteria:
+=========================
+- All POSIX library functions work correctly
+- Thread creation/termination reliable with POSIX
+- Input validation prevents POSIX library misuse
+- Timing measurements accurate with POSIX implementation
+- Resource cleanup complete for POSIX threads
+- Performance acceptable for POSIX pthread implementation
+- Error handling robust for POSIX-specific failures
+- Full compliance with POSIX threading standards
