@@ -1,0 +1,74 @@
+CMPT 332 Grading Scheme Fall 2025
+Assignment 1 - Phase 1
+
+Names: Jana | Jha
+NSID: aaj284 | naj474
+Student Number: 11297343 | 11282001
+
+TOTAL:  4.25/25 marks
+
+
+PART A: Children and Parent Threads    0/5 marks
+
+PART A1:
+
+Design Doc:  0/2 marks
+  (-2) - Missing file
+
+Implementation: 0/2 marks
+  (-2) - Line 72 longer than 80 characters.
+
+  It's good practice to name the .c file and the .h file for the same function 
+the same. In this case, you have the square function in square.c but the 
+associated header file is called partA1.c. Also, you aren't including the 
+header file in square.c.
+
+- Structs are not like python dictionaries. They may have similarities but there
+are huge differences.
+  
+- ALWAYS check system call return values. (calloc calls Lines 65, 66, & 67)
+  
+- If you're checking a boolean value in an if statement, you don't need to
+  compare it to true; you can just check the value. :)
+
+
+Makefile  0/0.5 marks
+  (-0.5) - Missing file
+
+Git Log:  0/0.5 marks
+  (-0.5) - Missing file.
+
+PART B: Script   0/5 marks
+
+    -No submission
+
+PART C: List/Tree	0.25/5 marks
+
+Design Doc: 0 /2 marks
+
+        No design doc submitted!
+       
+Skeleton/Stubs/Testprogram: 0.25/2 marks
+
+The skeleton is not complete and test program does not work as it was asked in
+Phase1.
+
+
+Makefile 0/0.5 marks
+
+no make file was submitted!
+
+
+GIT Log: 0 /0.5 marks
+
+not git log was submitted!
+
+
+
+Part F: 4/10 marks
+
+    (-6) This is a good trial, however, try and be more descriptive and not 
+    just listing the guidelines. Secondly, the doc is missing some of the 
+    components such as bash, header, source files, dir structures, how you will
+    deal with white spaces, functions, compile flags, file permissions, etc.
+

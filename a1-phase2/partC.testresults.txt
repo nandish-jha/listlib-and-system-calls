@@ -1,0 +1,127 @@
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+
+Building partC...
+Building list library version...
+Detected OS: Linux
+building partC with list library...
+gcc mytestlist.o list_movers.o list_adders.o list_removers.o -o partC
+Running partC...
+-----------------------------------------
+Running partC (no input arguments needed)...
+=== Part C List Implementation Test Program ===
+
+1. Testing ListCreate():
+Reached function: ListCreate - Creating new empty list
+   ListCreate: List created successfully
+Reached function: ListCreate - Creating new empty list
+   ListCreate: List created successfully
+   SUCCESS: List created
+   SUCCESS: List created
+
+2. Testing ListCount() on empty list:
+Reached function: ListCount - Getting list count
+   SUCCESS: Initial count is 0
+
+3. Testing ListAppend():
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 100
+   SUCCESS: Item appended
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 200
+   SUCCESS: 2nd Item appended
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 300
+   SUCCESS: 3rd Item appended
+
+4. Testing ListCount() after additions:
+Reached function: ListCount - Getting list count
+   SUCCESS: Count after 3 appends is 3
+
+5. Testing navigation functions:
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+   ListFirst successful
+   current: 100
+Reached function: ListLast - Moving to last item
+   ListLast: At last item
+   SUCCESS: ListLast successful
+   current: 300
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+   ListNext: NULL (at end)
+
+6. Testing ListInsert():
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+   ListNext: 200
+Reached function: ListInsert - Inserting item before current position
+   ListInsert: Successfully inserted item 150
+   SUCCESS: ListInsert result: 0
+
+6. Testing ListPrepend():
+Reached function: ListPrepend - Adding item to front of list
+   ListPrepend: Successfully prepended item 95
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+   SUCCESS: ListPrepend result: 0
+
+8. Testing ListAppend on 2nd List :
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 350
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 400
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 450
+   SUCCESS: ListAppend on 2nd List count: 3
+   ListAppend on 2nd List result: 0
+
+9. Testing ListConcat w/testList and list2 :
+Reached function: ListConcat - Concatenating two lists
+   ListConcat: Lists concatenated (stub implementation)
+Reached function: ListCount - Getting list count
+   ListConcat w/testList and list2, count result: 8
+   SUCCESS: ListConcat concatenated properly
+
+10. Testing ListPrev :
+Reached function: ListLast - Moving to last item
+   ListLast: At last item
+Reached function: ListPrev - Moving to previous item
+   ListPrev: Moved to previous item
+   ListPrev: 400
+Reached function: ListPrev - Moving to previous item
+   ListPrev: Moved to previous item
+   ListPrev: 350
+Reached function: ListPrev - Moving to previous item
+   ListPrev: Moved to previous item
+   ListPrev: 300
+
+11. Testing ListAdd :
+Reached function: ListAdd - Adding item after current position
+   ListAdd: Successfully added item
+   ListAdd: 410
+Reached function: ListAdd - Adding item after current position
+   ListAdd: Successfully added item
+   ListAdd: 420
+Reached function: ListAdd - Adding item after current position
+   Error: No more nodes can be allocated. Max limit reached.
+   ListAdd: Failed
+   SUCCESS: ListAdd added items properly (upto MAX_LIMIT), count: 10
+  Current count of items in list: 10
+
+12. Testing ListRemove():
+Reached function: ListRemove - Removing current item
+   ListRemove: Item removed (stub implementation)
+   Nothing removed
+
+13. Testing ListFree():
+Reached function: ListFree - Freeing list and all items
+   ListFree: List freed successfully (stub implementation)
+   List freed successfully
+
+All 15 tests passed successfully!
+
+=== Test Program Complete ===
+partC completed successfully

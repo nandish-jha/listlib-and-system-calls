@@ -1,0 +1,132 @@
+Nandish Jha NAJ474 11282001
+Aakash Jana AAJ284 11297343
+
+=======================
+Part C Design Document
+=======================
+
+Overview:
+---------
+Part C implements a generic doubly-linked list library providing comprehensive
+list operations. The implementation follows a modular design with separate
+source files for different categories of operations and includes a robust
+test program to validate functionality.
+
+Key Components:
+---------------
+1. Library Architecture:
+   - header.h: Unified header file with all function prototypes, type 
+      definitions, and system includes
+   - list_adders.c: Functions for adding items (Add, Insert, Append, Prepend)
+   - list_movers.c: Navigation and query functions (First, Last, Next, Prev, 
+      Current, Count, Search)
+   - list_removers.c: Removal and management functions 
+      (Remove, Trim, Concat, Free, Create)
+
+2. Data Structure Design:
+   - Opaque LIST type hides implementation details from users
+   - Generic void* item storage allows any data type
+   - Function pointer types for custom comparators and free functions
+   - Current position tracking for navigation state
+
+3. Function Categories:
+   
+   Creation & Query:
+   - ListCreate(): Creates new empty list
+   - ListCount(): Returns number of items in list
+   
+   Navigation Functions:
+   - ListFirst()/ListLast(): Move to start/end and return item
+   - ListNext()/ListPrev(): Move forward/backward and return item
+   - ListCurr(): Return current item without moving
+   
+   Insertion Functions:
+   - ListAdd(): Insert after current position
+   - ListInsert(): Insert before current position  
+   - ListAppend(): Add to end of list
+   - ListPrepend(): Add to beginning of list
+   
+   Removal & Management:
+   - ListRemove(): Remove and return current item
+   - ListTrim(): Remove and return last item
+   - ListConcat(): Combine two lists (consumes second list)
+   - ListFree(): Deallocate list and optionally free items
+   - ListSearch(): Find item using custom comparator function
+
+4. Error Handling:
+   - Comprehensive NULL parameter checking in all functions
+   - Informative error messages for debugging
+   - Safe return values for error conditions
+   - Graceful handling of edge cases
+
+5. Test Program Design:
+   - Comprehensive test suite in mytestlist.c
+   - Tests all major function categories systematically
+   - Validates expected behavior with sample data
+   - Provides clear pass/fail feedback for each test
+   - Tests error conditions and edge cases
+
+6. Implementation Status (Phase 1):
+   - Complete stub implementation with detailed logging
+   - All functions print entry messages and parameter validation
+   - Test program exercises full API surface
+   - Compilation and linking fully functional
+   - Foundation ready for full implementation in Phase 2
+
+Files Structure:
+----------------
+- header.h: Unified public interface with complete API documentation 
+and all necessary system includes
+- list_adders.c: Adding/insertion function implementations
+- list_movers.c: Navigation and query function implementations  
+- list_removers.c: Removal, creation, and management functions
+- mytestlist.c: Comprehensive test program
+
+Compilation Strategy:
+---------------------
+- Single header file (header.h) simplifies dependency management
+- Modular compilation allows separate object files
+- Static library creation from multiple object files
+- Test program links against library
+- Makefile handles complex dependencies and OS-specific flags
+- Clean separation between interface and implementation
+   - We will use `ar` to bundle it into a static library (libpartC.a).
+   - The test program will link against libpartC.a.
+
+Planned Steps (Future Phases):
+------------------------------
+- Implement real logic inside the library functions.
+- Add error handling.
+- Expand test program to validate correctness.
+
+Phase 1 Deliverable:
+--------------------
+- partC.c and partC.h containing stub functions with printf
+- mytestlist.c calling the stub functions
+- Makefile compiles everything and builds libpartC.a
+
+Implementation and Testing Details (Phase 2)
+--------------------------------------------
+
+- **Stub Implementation with Modular Design:**  
+  All list operations are implemented as stubs in separate modules (`list_adders.c`, `list_movers.c`, `list_removers.c`). Each function prints a message when called and performs parameter validation, returning safe default values or error codes as appropriate.
+
+- **Memory Pool Strategy:**  
+  The implementation uses statically allocated pools for both nodes and lists. Initialization is performed once in `ListCreate`, setting up free lists for efficient allocation and deallocation. This approach avoids dynamic memory allocation and ensures predictable resource usage.
+
+- **Parameter Validation and Error Handling:**  
+  Every function checks for NULL pointers and invalid parameters, printing informative error messages. This ensures robust error handling and helps catch misuse early in development.
+
+- **Test Program Structure (`mytestlist.c`):**  
+  The test program systematically exercises all major API functions:
+  - List creation, insertion, appending, prepending, and removal
+  - Navigation (first, last, next, previous, current)
+  - List concatenation and freeing
+  - Edge cases such as empty lists and multiple list management
+  - Each test prints clear success/failure messages and increments a test counter for passed tests
+
+- **Test Coverage:**  
+  The test suite covers 15 distinct scenarios, including both normal and edge cases. The `tests_passed` counter provides a summary of successful tests, and output messages facilitate visual verification.
+
+- **Logging and Debugging:**  
+  All stub functions include entry logs and parameter checks, making it easy to trace execution flow and validate that the correct functions are being called during testing.
