@@ -1,0 +1,300 @@
+/*
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+*/
+
+Building partC...
+gcc -c -g -std=gnu90 -Wall -pedantic 	 -I. 								 mytestlist.c -o mytestlist.o
+Detected OS: Linux
+building partC with list library...
+gcc mytestlist.o list_movers.o list_adders.o list_removers.o -o partC
+Running partC...
+-----------------------------------------
+
+Running partC (no input arguments needed)...
+=== Part C List Implementation Test Program ===
+
+1. Testing ListCreate():
+Reached function: ListCreate - Creating new empty list
+   ListCreate: List created successfully
+Reached function: ListCreate - Creating new empty list
+   ListCreate: List created successfully
+   SUCCESS: List created
+   SUCCESS: List created
+
+2. Testing ListCount() on empty list:
+Reached function: ListCount - Getting list count
+   SUCCESS: Initial count is 0
+
+3. Testing ListAppend():
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 100
+   SUCCESS: Item appended
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 200
+   SUCCESS: 2nd Item appended
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 300
+   SUCCESS: 3rd Item appended
+
+4. Testing ListCount() after additions:
+Reached function: ListCount - Getting list count
+   SUCCESS: Count after 3 appends is 3
+
+5. Testing navigation functions:
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+   ListFirst successful
+   current: 100
+Reached function: ListLast - Moving to last item
+   ListLast: At last item
+   SUCCESS: ListLast successful
+   current: 300
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+   ListNext: NULL (at end)
+
+6. Testing ListInsert():
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+   ListNext: 200
+Reached function: ListInsert - Inserting item before current position
+   ListInsert: Successfully inserted item 150
+   SUCCESS: ListInsert result: 0
+
+6. Testing ListPrepend():
+Reached function: ListPrepend - Adding item to front of list
+   ListPrepend: Successfully prepended item 150
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+   SUCCESS: ListPrepend result: 0
+
+8. Testing ListAppend on 2nd List :
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 350
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 400
+Reached function: ListAppend - Adding item to end of list
+   ListAppend: Successfully appended item 450
+   SUCCESS: ListAppend on 2nd List count: 3
+   ListAppend on 2nd List result: 0
+
+9. Testing ListConcat w/testList and list2 :
+Reached function: ListConcat - Concatenating two lists
+   ListConcat: Lists concatenated (stub implementation)
+Reached function: ListCount - Getting list count
+   ListConcat w/testList and list2, count result: 8
+   SUCCESS: ListConcat concatenated properly
+
+10. Testing ListPrev :
+Reached function: ListLast - Moving to last item
+   ListLast: At last item
+Reached function: ListPrev - Moving to previous item
+   ListPrev: Moved to previous item
+   ListPrev: 400
+Reached function: ListPrev - Moving to previous item
+   ListPrev: Moved to previous item
+   ListPrev: 350
+Reached function: ListPrev - Moving to previous item
+   ListPrev: Moved to previous item
+   ListPrev: 300
+
+11. Testing ListAdd :
+Reached function: ListAdd - Adding item after current position
+   ListAdd: Successfully added item
+   ListAdd: 1000
+Reached function: ListAdd - Adding item after current position
+   ListAdd: Successfully added item
+   ListAdd: 2000
+Reached function: ListAdd - Adding item after current position
+   Error: No more nodes can be allocated. Max limit reached.
+   ListAdd: Failed
+   SUCCESS: ListAdd added items properly (upto MAX_LIMIT), count: 10
+  Current count of items in list: 10
+
+12. Testing search functionality:
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+	 a. Testing search for item present in list: 300
+Reached function: ListSearch - Searching for item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+   ListSearch: Item found
+   ListSearch successful for item 300
+   found: 300
+	 12b. Testing if cursor is left at the found item after search : 300
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+   As Expected : Cursor is at found position after search
+   current: 300
+	 12c. Testing search for item not present in list: 750
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+Reached function: ListSearch - Searching for item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+   ListSearch: Search complete : item not found
+   As Expected : ListSearch unsuccessful for item 750
+	 12d. Testing if cursor is left at last after search for absent item : 750
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+   As Expected : Cursor is at last position after search
+
+13. Testing ListRemove():
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListCount - Getting list count
+Reached function: ListRemove - Removing current item
+   ListRemove: Item removed
+   Removed item: 200
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+Reached function: ListCount - Getting list count
+Reached function: ListSearch - Searching for item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+   ListSearch: Search complete : item not found
+Reached function: ListCount - Getting list count
+   SUCCESS: ListRemove removed item properly, new count: 9
+
+14. Testing ListTrim():
+Reached function: ListCount - Getting list count
+   Current count before trim: 9
+Reached function: ListTrim - Removing and returning last item
+Reached function: ListLast - Moving to last item
+   ListLast: At last item
+Reached function: ListRemove - Removing current item
+   ListRemove: Item removed
+   ListTrim: Last item trimmed
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+Reached function: ListCount - Getting list count
+Reached function: ListSearch - Searching for item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+   ListSearch: Search complete : item not found
+Reached function: ListCount - Getting list count
+   SUCCESS: ListTrim trimmed item properly, new count: 8
+   Trimmed item: 450
+
+15. Testing ListFree():
+Reached function: ListFree - Freeing list and all items
+Reached function: ListFirst - Moving to first item
+   ListFirst: At first item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+   Freeing item: 95
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+   Freeing item: 100
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+   Freeing item: 150
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+   Freeing item: 300
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+   Freeing item: 2000
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+   Freeing item: 1000
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+   Freeing item: 350
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+Reached function: ListCurr - Getting current item
+   ListCurr: Returning current item
+   Freeing item: 400
+Reached function: ListNext - Moving to next item
+   ListNext: Moved to next item
+   ListFree: List freed successfully 
+   List freed successfully
+   SUCCESS: ListFree added list back to free list
+
+All 22 tests passed successfully!
+
+=== Test Program Complete ===

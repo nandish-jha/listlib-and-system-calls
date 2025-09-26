@@ -1,0 +1,59 @@
+AAKASH JANA AAJ284 11297343
+NANDISH JHA NAJ474 11282001
+
+Part D: Test Plan for xv6 User Program (find)
+============================================
+
+Objective:
+----------
+Verify that the find program correctly searches for files with a given name
+   in a directory tree and prints their full paths.
+
+Test Cases:
+-----------
+1. **Basic file search**
+   - Create a file named 'b' in the root directory.
+   - Run: find . b
+   - Expected output: ./b
+
+2. **Search in subdirectory**
+   - Create directory 'a', then file 'a/b'.
+   - Run: find . b
+   - Expected output: ./a/b
+
+3. **Search in nested subdirectory**
+   - Create directory 'a/aa', then file 'a/aa/b'.
+   - Run: find . b
+   - Expected output: ./a/aa/b
+
+4. **Multiple matches**
+   - All above files exist.
+   - Run: find . b
+   - Expected output:
+     ./b
+     ./a/b
+     ./a/aa/b
+
+5. **No matches**
+   - Run: find . z
+   - Expected output: (no output)
+
+6. **Search for a directory name**
+   - Run: find . a
+   - Expected output: (no output, since only files are matched)
+
+7. **Invalid arguments**
+   - Run: find .
+   - Expected output: Usage: find <path> <filename>
+
+8. **Path too long**
+   - Create deeply nested directories and file with long path.
+   - Run: find . b
+   - Expected output: Should not crash; may skip long paths.
+
+Instructions:
+-------------
+- Use xv6 shell commands (echo, mkdir, etc.) to set up test files and
+   directories.
+- Run the find program with various arguments as described above.
+- Record the output for each test case in the test results file.

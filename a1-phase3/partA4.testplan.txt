@@ -1,0 +1,502 @@
+Nandish Jha NAJ474 11282001
+Aakash Jana AAJ284 11297343
+
+=======================================
+Part A4 Comprehensive Test Plan
+=======================================
+
+Overview:
+---------
+This test plan provides exhaustive testing coverage for Part A4, which
+implements a multi-process solution using UNIX processes (fork() system
+call) to compute squares using a recursive algorithm. The implementation
+creates multiple child processes using fork(), each calling Square(N) for
+values 1 to N until a deadline is reached, with inter-process communication
+through shared memory.
+
+Implementation Details:
+----------------------
+- Uses UNIX fork() system call for process creation
+- Main process creates multiple child processes directly
+- Inter-process communication via shared memory (shmget, shmat, shmdt)
+- Signal handling for process termination (SIGUSR1, kill())
+- Global volatile flag 'keep_running' controls execution per process
+- Process-local storage for current_thread identification
+- Timing measurements using gettimeofday() for microsecond precision
+- Memory allocation for process IDs and shared memory management
+- Process synchronization using waitpid() for cleanup
+- Uses sleep() for timing delays (POSIX sleep function)
+
+Test Categories:
+================
+
+1. BASIC FUNCTIONALITY TESTS
+-----------------------------
+
+Test Case A4.1.1: Single Process Configuration
+- Input: 1 process, 2 second deadline, size 5
+- Purpose: Test single UNIX process creation and execution
+- Expected Results:
+  * Single child process created successfully using fork()
+  * Process completes multiple Square(1) to Square(5) iterations
+  * Proper timing measurements using gettimeofday()
+  * Clean process termination using signal handling
+  * Parent summary shows correct square call count in shared memory
+
+Test Case A4.1.2: Standard Multi-Process Configuration
+- Input: 4 processes, 5 second deadline, size 10
+- Purpose: Test typical UNIX multi-process execution
+- Expected Results:
+  * All 4 child processes created with fork() returning valid PIDs
+  * Each process repeatedly loops through Square(1) to Square(10) until
+      deadline
+  * Processes run concurrently for approximately 5 seconds
+  * SIGUSR1 signal properly stops execution after deadline
+  * Each process reports elapsed time and total square call count
+  * Parent process summary matches individual process reports
+  * Square call count much higher than size (multiple complete loops)
+
+Test Case A4.1.3: Higher Process Count
+- Input: 8 processes, 3 second deadline, size 15
+- Purpose: Test UNIX process scalability
+- Expected Results:
+  * All 8 processes created without fork() errors
+  * Concurrent execution without process interference
+  * Proper shared memory management across processes
+  * No process ID conflicts or memory corruption
+
+2. UNIX PROCESS-SPECIFIC TESTS
+-------------------------------
+
+Test Case A4.2.1: fork() System Call Verification
+- Input: 6 processes, 4 second deadline, size 12
+- Purpose: Test UNIX-specific process creation
+- Expected Results:
+  * fork() returns valid child PIDs to parent process
+  * fork() returns 0 to child processes
+  * Child processes execute ChildProcessFunction() correctly
+  * Parent process maintains array of child PIDs
+  * No fork() failures (-1 return values)
+
+Test Case A4.2.2: Signal Handling Verification
+- Input: 3 processes, 6 second deadline, size 20
+- Purpose: Test UNIX signal-based process termination
+- Expected Results:
+  * signal(SIGUSR1, signal_handler) registered correctly
+  * kill(child_pid, SIGUSR1) sends termination signal
+  * Signal handler sets keep_running = 0 properly
+  * Processes terminate gracefully upon signal reception
+  * No zombie processes remain after termination
+
+Test Case A4.2.3: waitpid() Synchronization Verification
+- Input: 5 processes, 8 second deadline, size 25
+- Purpose: Test process synchronization and cleanup
+- Expected Results:
+  * waitpid() waits for each child process completion
+  * Parent process blocks until child termination
+  * Exit status collected properly from child processes
+  * No zombie processes created during execution
+  * Proper process cleanup and resource deallocation
+
+3. SHARED MEMORY TESTS
+----------------------
+
+Test Case A4.3.1: Shared Memory Creation and Initialization
+- Input: 4 processes, 5 second deadline, size 15
+- Purpose: Test shared memory setup and initialization
+- Expected Results:
+  * shmget() creates shared memory segment successfully
+  * Shared memory size equals number_of_processes * sizeof(int)
+  * IPC_PRIVATE key provides process-private shared memory
+  * IPC_CREAT | 0666 permissions set correctly
+  * shmat() attaches shared memory to parent process
+
+Test Case A4.3.2: Shared Memory Access Across Processes
+- Input: 6 processes, 7 second deadline, size 20
+- Purpose: Test shared memory access from child processes
+- Expected Results:
+  * Child processes inherit shared memory attachment
+  * Square counter updates visible across all processes
+  * No data corruption in concurrent shared memory access
+  * Each process updates its own index in shared memory array
+  * Parent can read all process counters after completion
+
+Test Case A4.3.3: Shared Memory Cleanup
+- Input: 3 processes, 4 second deadline, size 10
+- Purpose: Test proper shared memory cleanup
+- Expected Results:
+  * shmdt() detaches shared memory from parent process
+  * shmctl(shmid, IPC_RMID, NULL) removes shared memory segment
+  * No shared memory segments remain after program completion
+  * System shared memory resources properly released
+
+4. BOUNDARY AND EDGE CASE TESTS
+--------------------------------
+
+Test Case A4.4.1: Minimum Boundary Values
+- Input: 1 process, 1 second deadline, size 1
+- Purpose: Test absolute minimum valid parameters
+- Expected Results:
+  * Single process executes Square(1) repeatedly for 1 second
+  * fork() and shared memory work with minimal configuration
+  * Accurate timing measurements with gettimeofday()
+  * Proper initialization and cleanup
+
+Test Case A4.4.2: High Process Count Boundary
+- Input: 100 processes, 8 second deadline, size 50
+- Purpose: Test system with higher process counts
+- Expected Results:
+  * System handles moderate process counts properly
+  * Shared memory allocation succeeds for reasonable arrays
+  * No resource exhaustion with moderate parameters
+  * System remains stable throughout execution
+
+Test Case A4.4.3: Quick Deadline Test
+- Input: 5 processes, 1 second deadline, size 1000
+- Purpose: Test behavior with very short execution time
+- Expected Results:
+  * Processes start but may not complete many iterations
+  * SIGUSR1 signal properly stops execution quickly
+  * All processes terminate within deadline + cleanup time
+  * Signal handling works with rapid termination
+
+Test Case A4.4.4: Extended Execution Test
+- Input: 3 processes, 60 second deadline, size 100
+- Purpose: Test extended execution stability with processes
+- Expected Results:
+  * Stable execution for full 60 seconds
+  * Process integrity maintained over long duration
+  * Consistent square call counting over time
+  * No process-related memory leaks or resource exhaustion
+
+5. ERROR HANDLING AND VALIDATION TESTS
+---------------------------------------
+
+Test Case A4.5.1: Invalid Process Count - Zero
+- Input: 0 processes, 5 second deadline, size 10
+- Purpose: Test input validation for process count
+- Expected Results:
+  * Program displays error message about process count range
+  * Program exits with error message
+  * No fork() calls attempted
+
+Test Case A4.5.2: Invalid Process Count - Negative
+- Input: -3 processes, 5 second deadline, size 10
+- Purpose: Test negative process count handling
+- Expected Results:
+  * Program displays error message about valid range
+  * Program exits with error message
+  * No system calls attempted
+
+Test Case A4.5.3: Invalid Process Count - Excessive
+- Input: 1001 processes, 5 second deadline, size 10
+- Purpose: Test upper bound validation
+- Expected Results:
+  * Program displays error message about maximum process limit
+  * Program exits with error message
+
+Test Case A4.5.4: Invalid Deadline - Zero
+- Input: 4 processes, 0 second deadline, size 10
+- Purpose: Test deadline validation
+- Expected Results:
+  * Program displays error message about deadline range
+  * Program exits with error message
+
+Test Case A4.5.5: Invalid Deadline - Negative
+- Input: 4 processes, -2 second deadline, size 10
+- Purpose: Test negative deadline handling
+- Expected Results:
+  * Program displays error message
+  * Program exits with error message
+
+Test Case A4.5.6: Invalid Deadline - Excessive
+- Input: 4 processes, 121 second deadline, size 10
+- Purpose: Test upper deadline bound
+- Expected Results:
+  * Program displays error message about maximum deadline
+  * Program exits with error message
+
+Test Case A4.5.7: Invalid Size - Zero
+- Input: 4 processes, 5 second deadline, size 0
+- Purpose: Test size parameter validation
+- Expected Results:
+  * Program displays error message about size range
+  * Program exits with error message
+
+Test Case A4.5.8: Invalid Size - Negative
+- Input: 4 processes, 5 second deadline, size -5
+- Purpose: Test negative size handling
+- Expected Results:
+  * Program displays error message
+  * Program exits with error message
+
+Test Case A4.5.9: Invalid Size - Excessive
+- Input: 4 processes, 5 second deadline, size 10001
+- Purpose: Test upper size bound
+- Expected Results:
+  * Program displays error message about maximum size
+  * Program exits with error message
+
+Test Case A4.5.10: fork() Failure Simulation
+- Input: Very high process count to trigger fork() failure
+- Purpose: Test handling of fork() failures
+- Expected Results:
+  * Program detects fork() returning -1
+  * perror() displays appropriate system error message
+  * Program exits with error message
+
+Test Case A4.5.11: Shared Memory Creation Failure
+- Input: Large process count causing shmget() failure
+- Purpose: Test shared memory allocation failure handling
+- Expected Results:
+  * Program detects shmget() returning -1
+  * perror("Failed to create shared memory") displayed
+  * Program exits with error message
+
+Test Case A4.5.12: Shared Memory Attachment Failure
+- Input: Simulate shmat() failure conditions
+- Purpose: Test shared memory attachment error handling
+- Expected Results:
+  * Program detects shmat() returning (int*)-1
+  * perror("Failed to attach shared memory") displayed
+  * Program exits with error message
+
+Test Case A4.5.13: Memory Allocation Failure
+- Input: Large process count that exhausts memory
+- Purpose: Test malloc() failure handling
+- Expected Results:
+  * Program detects malloc() returning NULL
+  * Displays "Memory allocation failed"
+  * Program exits with error message
+
+Test Case A4.5.14: Insufficient Arguments
+- Input: ./partA4 4 5 (missing size parameter)
+- Purpose: Test argument count validation
+- Expected Results:
+  * Program displays "Error: Expecting 3 arguments"
+  * Program exits with error message
+
+6. INTER-PROCESS COMMUNICATION TESTS
+-------------------------------------
+
+Test Case A4.6.1: Shared Memory Counter Updates
+- Input: 4 processes, 6 second deadline, size 20
+- Purpose: Test shared memory updates from multiple processes
+- Expected Results:
+  * Each process updates its own counter index
+  * No race conditions in shared memory access
+  * Counter values accumulate correctly for each process
+  * Parent reads final counter values accurately
+
+Test Case A4.6.2: Process Isolation Verification
+- Input: 5 processes, 8 second deadline, size 30
+- Purpose: Verify process memory isolation
+- Expected Results:
+  * Each process has separate memory space except shared memory
+  * current_thread variable isolated per process
+  * No interference between process-local variables
+  * Only shared memory accessible across processes
+
+Test Case A4.6.3: Signal Communication Test
+- Input: 7 processes, 10 second deadline, size 25
+- Purpose: Test signal-based inter-process communication
+- Expected Results:
+  * Parent can send SIGUSR1 to all child processes
+  * Each child process receives and handles signal correctly
+  * Signal handler modifies keep_running flag properly
+  * No signal delivery failures or missed signals
+
+7. PROCESS LIFECYCLE TESTS
+---------------------------
+
+Test Case A4.7.1: Process Creation Lifecycle
+- Input: 6 processes, 5 second deadline, size 15
+- Purpose: Verify complete process creation process
+- Expected Results:
+  * fork() creates child processes successfully
+  * Child processes execute ChildProcessFunction()
+  * Parent process continues with next fork() call
+  * Process IDs stored and managed correctly
+  * Creation success messages display properly
+
+Test Case A4.7.2: Process Execution Lifecycle
+- Input: 4 processes, 7 second deadline, size 18
+- Purpose: Verify process execution behavior
+- Expected Results:
+  * Child processes start with proper parameter passing
+  * current_thread variable set correctly in each process
+  * Square() function called with proper process context
+  * Process execution continues until signal received
+  * exit(0) called properly at process completion
+
+Test Case A4.7.3: Process Termination Lifecycle
+- Input: 8 processes, 4 second deadline, size 12
+- Purpose: Verify process termination process
+- Expected Results:
+  * kill() sends SIGUSR1 to each child process
+  * waitpid() waits for each process completion
+  * Process termination messages display properly
+  * No zombie processes remain after cleanup
+  * Shared memory detached and removed
+
+8. OUTPUT FORMAT AND MESSAGING TESTS
+-------------------------------------
+
+Test Case A4.8.1: Process-Specific Output Verification
+- Input: 3 processes, 6 second deadline, size 14
+- Purpose: Verify process-specific output formatting
+- Expected Results:
+  * Process creation success messages show PID numbers
+  * Process execution messages properly formatted
+  * Parent summary shows process-specific information
+  * Output distinguishes between processes and threads correctly
+
+Test Case A4.8.2: Error Message Verification
+- Input: Various invalid inputs and failure conditions
+- Purpose: Test process-specific error messaging
+- Expected Results:
+  * "Failed to create child process" when fork() fails
+  * Shared memory error messages with perror()
+  * Memory allocation failure messages
+  * Proper error codes returned for various failure modes
+
+9. INTEGRATION TESTS WITH UNIX SYSTEM
+--------------------------------------
+
+Test Case A4.9.1: UNIX System Integration
+- Input: 6 processes, 9 second deadline, size 28
+- Purpose: Test full integration with UNIX system calls
+- Expected Results:
+  * Seamless integration with UNIX process model
+  * Proper usage of system calls (fork, kill, waitpid, etc.)
+  * All UNIX-specific features work correctly
+  * No conflicts between system calls and application logic
+
+Test Case A4.9.2: Square Function Integration with Processes
+- Input: 5 processes, 8 second deadline, size 22
+- Purpose: Verify Square() integration with UNIX processes
+- Expected Results:
+  * Square() function called correctly from child processes
+  * Process-local current_thread variable works properly
+  * Square counter incremented in shared memory correctly
+  * No interference between processes calling Square()
+
+10. PERFORMANCE AND STRESS TESTS
+---------------------------------
+
+Test Case A4.10.1: Process Creation Performance
+- Input: 15 processes, 12 second deadline, size 40
+- Purpose: Test process creation performance
+- Expected Results:
+  * Processes created efficiently with fork()
+  * Reasonable performance for process-based implementation
+  * Process creation overhead acceptable
+  * Stable performance throughout execution
+
+Test Case A4.10.2: Shared Memory Performance
+- Input: 25 processes, 10 second deadline, size 35
+- Purpose: Test shared memory performance under moderate load
+- Expected Results:
+  * Shared memory access performs adequately
+  * No significant bottlenecks in shared memory updates
+  * Counter updates work correctly with moderate process count
+  * Memory access patterns remain efficient
+
+Test Case A4.10.3: Process Resource Management Test
+- Input: 20 processes, 8 second deadline, size 30
+- Purpose: Test behavior with multiple processes
+- Expected Results:
+  * System handles multiple processes gracefully
+  * Fair CPU scheduling among processes
+  * No deadlocks or race conditions in shared memory
+  * Proper resource management
+
+11. SYSTEM RESOURCE TESTS
+--------------------------
+
+Test Case A4.11.1: Process Limit Testing
+- Input: Incrementally test with 50, 100, 200 processes
+- Purpose: Test reasonable process limits
+- Expected Results:
+  * System handles moderate process counts gracefully
+  * Clear error messages if limits exceeded
+  * No system instability
+  * Proper error handling for resource constraints
+
+Test Case A4.11.2: Shared Memory Limit Testing
+- Input: Large process count testing shared memory limits
+- Purpose: Test shared memory system limits
+- Expected Results:
+  * Shared memory creation succeeds within system limits
+  * Clear error messages when shared memory limits exceeded
+  * Proper cleanup when allocation fails
+  * No shared memory leaks under stress
+
+Test Case A4.11.3: File Descriptor Limit Testing
+- Input: High process count testing file descriptor limits
+- Purpose: Test file descriptor usage with many processes
+- Expected Results:
+  * Process creation doesn't exhaust file descriptors
+  * Shared memory operations don't leak file descriptors
+  * Proper cleanup of all file descriptors
+  * No file descriptor exhaustion warnings
+
+12. PORTABILITY AND COMPATIBILITY TESTS
+----------------------------------------
+
+Test Case A4.12.1: Basic UNIX Compatibility
+- Input: 6 processes, 5 second deadline, size 20
+- Purpose: Test basic UNIX system call functionality
+- Expected Results:
+  * fork() works correctly
+  * Signal handling functions properly
+  * Shared memory operations work correctly
+  * Timing functions provide reasonable results
+
+Test Case A4.12.2: Process Signal Handling Compatibility
+- Input: 6 processes, 5 second deadline, size 18
+- Purpose: Test signal handling compatibility
+- Expected Results:
+  * SIGUSR1 handling works consistently
+  * Signal delivery reliable across different systems
+  * Signal handler registration works properly
+  * No signal masking or blocking issues
+
+Testing Environment:
+====================
+- Platform: UNIX-compatible systems (Linux, Unix variants)
+- Compiler: GCC with UNIX system call support
+- Required System Calls: fork(), kill(), waitpid(), signal()
+- Required IPC: shmget(), shmat(), shmdt(), shmctl()
+- Memory: Sufficient for process creation and shared memory
+- Execution: Standard UNIX process execution environment
+
+Test Execution Strategy:
+========================
+1. Verify UNIX system call availability and permissions
+2. Test basic process functionality before complex scenarios
+3. Validate process-specific features (fork, signals, shared memory)
+4. Test error handling with system call failures
+5. Perform stress testing within system resource limits
+6. Verify proper resource cleanup and system stability
+
+Expected Results Documentation:
+==============================
+- Record UNIX system version and configuration
+- Document all system calls and their return values
+- Note any system limitations encountered
+- Record performance characteristics of processes
+- Document shared memory usage and efficiency
+- Record any system-specific behaviors or issues
+
+Test Completion Criteria:
+=========================
+- All UNIX system calls work correctly
+- Process creation/termination reliable
+- Input validation prevents system call misuse
+- Timing measurements accurate with process implementation
+- Resource cleanup complete for all processes and shared memory
+- Performance acceptable for multi-process implementation
+- Error handling robust for all system call failures
+- Full compatibility with UNIX process model
+- Shared memory operations work reliably across processes

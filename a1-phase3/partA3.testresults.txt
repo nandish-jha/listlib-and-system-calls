@@ -1,0 +1,1584 @@
+Nandish Jha NAJ474 11282001
+Aakash Jana AAJ284 11297343
+
+Building partA3...
+Detected OS: Linux
+building partA3 with POSIX threads...
+gcc partA3.o square3.o -o partA3
+Running partA3...
+-----------------------------------------
+
+
+Choose input method:
+1) Enter input manually from keyboard
+2) Read input from a file
+3) Exit
+
+
+
+Inputs received...
+  Number of Threads: 4
+  Deadline (seconds): 5
+  Size for Square(): 10
+
+Parent thread created successfully
+   Parent thread started creating children
+   Child thread 1 created successfully
+      Thread 1: starting now
+   Child thread 2 created successfully
+      Thread 2: starting now
+   Child thread 3 created successfully
+      Thread 3: starting now
+   Child thread 4 created successfully
+   Parent sleeping for 5 seconds
+      Thread 4: starting now
+      Thread 1 completed, elapsed time: 1000.08 ms, square calls = 65
+      Thread 2 completed, elapsed time: 1000.09 ms, square calls = 65
+      Thread 3 completed, elapsed time: 1000.08 ms, square calls = 65
+      Thread 4 completed, elapsed time: 1000.08 ms, square calls = 65
+   Child thread 1 closed succesfully
+   Child thread 2 closed succesfully
+   Child thread 3 closed succesfully
+   Child thread 4 closed succesfully
+All child threads closed
+Parent Summary of square calls:
+   Thread 1: 65 square calls
+   Thread 2: 65 square calls
+   Thread 3: 65 square calls
+   Thread 4: 65 square calls
+Parent thread completed in 5000.43 ms (5.00 seconds)
+Parent thread closed
+
+=== PROGRAM SUMMARY ===
+   Total program elepsed times: 6000.14 ms (6.00 seconds)
+
+-----------------------------------------
+Inputs received...
+  Number of Threads: 1
+  Deadline (seconds): 1
+  Size for Square(): 1
+
+Parent thread created successfully
+   Parent thread started creating children
+   Child thread 1 created successfully
+   Parent sleeping for 1 seconds
+      Thread 1: starting now
+   Child thread 1 closed succesfully
+All child threads closed
+Parent Summary of square calls:
+   Thread 1: 0 square calls
+Parent thread completed in 1000.24 ms (1.00 seconds)
+   Thread 1 stopped at Square(1)
+      Thread 1 completed, elapsed time: 1000.08 ms, square calls = 844942224
+Parent thread closed
+
+=== PROGRAM SUMMARY ===
+   Total program elepsed times: 2000.14 ms (2.00 seconds)
+
+-----------------------------------------
+Inputs received...
+  Number of Threads: 100
+  Deadline (seconds): 5
+  Size for Square(): 50
+
+Parent thread created successfully
+   Parent thread started creating children
+   Child thread 1 created successfully
+      Thread 1: starting now
+   Child thread 2 created successfully
+      Thread 2: starting now
+   Child thread 3 created successfully
+      Thread 3: starting now
+   Child thread 4 created successfully
+      Thread 4: starting now
+   Child thread 5 created successfully
+      Thread 5: starting now
+   Child thread 6 created successfully
+      Thread 6: starting now
+   Child thread 7 created successfully
+      Thread 7: starting now
+   Child thread 8 created successfully
+      Thread 8: starting now
+   Child thread 9 created successfully
+      Thread 9: starting now
+   Child thread 10 created successfully
+      Thread 10: starting now
+   Child thread 11 created successfully
+      Thread 11: starting now
+   Child thread 12 created successfully
+      Thread 12: starting now
+   Child thread 13 created successfully
+      Thread 13: starting now
+   Child thread 14 created successfully
+      Thread 14: starting now
+   Child thread 15 created successfully
+      Thread 15: starting now
+   Child thread 16 created successfully
+      Thread 16: starting now
+   Child thread 17 created successfully
+      Thread 17: starting now
+   Child thread 18 created successfully
+      Thread 18: starting now
+   Child thread 19 created successfully
+      Thread 19: starting now
+   Child thread 20 created successfully
+      Thread 20: starting now
+   Child thread 21 created successfully
+      Thread 21: starting now
+   Child thread 22 created successfully
+      Thread 22: starting now
+   Child thread 23 created successfully
+      Thread 23: starting now
+   Child thread 24 created successfully
+      Thread 24: starting now
+   Child thread 25 created successfully
+      Thread 25: starting now
+   Child thread 26 created successfully
+      Thread 26: starting now
+   Child thread 27 created successfully
+      Thread 27: starting now
+   Child thread 28 created successfully
+      Thread 28: starting now
+   Child thread 29 created successfully
+      Thread 29: starting now
+   Child thread 30 created successfully
+      Thread 30: starting now
+   Child thread 31 created successfully
+      Thread 31: starting now
+   Child thread 32 created successfully
+      Thread 32: starting now
+   Child thread 33 created successfully
+      Thread 33: starting now
+   Child thread 34 created successfully
+      Thread 34: starting now
+   Child thread 35 created successfully
+      Thread 35: starting now
+   Child thread 36 created successfully
+      Thread 36: starting now
+   Child thread 37 created successfully
+      Thread 37: starting now
+   Child thread 38 created successfully
+      Thread 38: starting now
+   Child thread 39 created successfully
+      Thread 39: starting now
+   Child thread 40 created successfully
+      Thread 40: starting now
+   Child thread 41 created successfully
+      Thread 41: starting now
+   Child thread 42 created successfully
+      Thread 42: starting now
+   Child thread 43 created successfully
+      Thread 43: starting now
+   Child thread 44 created successfully
+      Thread 44: starting now
+   Child thread 45 created successfully
+      Thread 45: starting now
+   Child thread 46 created successfully
+      Thread 46: starting now
+   Child thread 47 created successfully
+      Thread 47: starting now
+   Child thread 48 created successfully
+      Thread 48: starting now
+   Child thread 49 created successfully
+      Thread 49: starting now
+   Child thread 50 created successfully
+      Thread 50: starting now
+   Child thread 51 created successfully
+      Thread 51: starting now
+   Child thread 52 created successfully
+      Thread 52: starting now
+   Child thread 53 created successfully
+      Thread 53: starting now
+   Child thread 54 created successfully
+      Thread 54: starting now
+   Child thread 55 created successfully
+      Thread 55: starting now
+   Child thread 56 created successfully
+      Thread 56: starting now
+   Child thread 57 created successfully
+      Thread 57: starting now
+   Child thread 58 created successfully
+      Thread 58: starting now
+   Child thread 59 created successfully
+      Thread 59: starting now
+   Child thread 60 created successfully
+      Thread 60: starting now
+   Child thread 61 created successfully
+      Thread 61: starting now
+   Child thread 62 created successfully
+      Thread 62: starting now
+   Child thread 63 created successfully
+      Thread 63: starting now
+   Child thread 64 created successfully
+      Thread 64: starting now
+   Child thread 65 created successfully
+      Thread 65: starting now
+   Child thread 66 created successfully
+      Thread 66: starting now
+   Child thread 67 created successfully
+      Thread 67: starting now
+   Child thread 68 created successfully
+      Thread 68: starting now
+   Child thread 69 created successfully
+      Thread 69: starting now
+   Child thread 70 created successfully
+      Thread 70: starting now
+   Child thread 71 created successfully
+      Thread 71: starting now
+   Child thread 72 created successfully
+      Thread 72: starting now
+   Child thread 73 created successfully
+      Thread 73: starting now
+   Child thread 74 created successfully
+      Thread 74: starting now
+   Child thread 75 created successfully
+      Thread 75: starting now
+   Child thread 76 created successfully
+      Thread 76: starting now
+   Child thread 77 created successfully
+      Thread 77: starting now
+   Child thread 78 created successfully
+      Thread 78: starting now
+   Child thread 79 created successfully
+      Thread 79: starting now
+   Child thread 80 created successfully
+      Thread 80: starting now
+   Child thread 81 created successfully
+      Thread 81: starting now
+   Child thread 82 created successfully
+      Thread 82: starting now
+   Child thread 83 created successfully
+      Thread 83: starting now
+   Child thread 84 created successfully
+      Thread 84: starting now
+   Child thread 85 created successfully
+      Thread 85: starting now
+   Child thread 86 created successfully
+      Thread 86: starting now
+   Child thread 87 created successfully
+      Thread 87: starting now
+   Child thread 88 created successfully
+      Thread 88: starting now
+   Child thread 89 created successfully
+      Thread 89: starting now
+   Child thread 90 created successfully
+      Thread 90: starting now
+   Child thread 91 created successfully
+      Thread 91: starting now
+   Child thread 92 created successfully
+      Thread 92: starting now
+   Child thread 93 created successfully
+      Thread 93: starting now
+   Child thread 94 created successfully
+      Thread 94: starting now
+   Child thread 95 created successfully
+      Thread 95: starting now
+   Child thread 96 created successfully
+      Thread 96: starting now
+   Child thread 97 created successfully
+      Thread 97: starting now
+   Child thread 98 created successfully
+      Thread 98: starting now
+   Child thread 99 created successfully
+      Thread 99: starting now
+   Child thread 100 created successfully
+   Parent sleeping for 5 seconds
+      Thread 100: starting now
+      Thread 1 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 2 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 3 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 4 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 5 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 6 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 7 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 8 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 9 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 10 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 11 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 12 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 13 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 14 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 15 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 16 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 17 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 18 completed, elapsed time: 1000.06 ms, square calls = 1325
+      Thread 19 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 20 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 21 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 22 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 23 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 24 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 25 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 26 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 27 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 28 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 29 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 30 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 31 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 32 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 33 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 34 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 35 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 36 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 37 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 38 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 39 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 40 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 41 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 42 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 43 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 44 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 45 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 46 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 47 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 48 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 49 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 50 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 51 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 52 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 53 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 54 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 56 completed, elapsed time: 1000.03 ms, square calls = 1325
+      Thread 55 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 57 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 58 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 59 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 60 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 61 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 62 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 63 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 64 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 65 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 66 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 67 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 68 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 69 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 70 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 71 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 72 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 73 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 74 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 75 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 76 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 77 completed, elapsed time: 1000.06 ms, square calls = 1325
+      Thread 78 completed, elapsed time: 1000.11 ms, square calls = 1325
+      Thread 79 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 81 completed, elapsed time: 1000.04 ms, square calls = 1325
+      Thread 80 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 82 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 83 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 85 completed, elapsed time: 1000.05 ms, square calls = 1325
+      Thread 84 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 86 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 87 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 88 completed, elapsed time: 1000.06 ms, square calls = 1325
+      Thread 89 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 90 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 91 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 92 completed, elapsed time: 1000.06 ms, square calls = 1325
+      Thread 93 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 94 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 95 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 96 completed, elapsed time: 1000.05 ms, square calls = 1325
+      Thread 97 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 98 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 99 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 100 completed, elapsed time: 1000.10 ms, square calls = 1325
+   Child thread 1 closed succesfully
+   Child thread 2 closed succesfully
+   Child thread 3 closed succesfully
+   Child thread 4 closed succesfully
+   Child thread 5 closed succesfully
+   Child thread 6 closed succesfully
+   Child thread 7 closed succesfully
+   Child thread 8 closed succesfully
+   Child thread 9 closed succesfully
+   Child thread 10 closed succesfully
+   Child thread 11 closed succesfully
+   Child thread 12 closed succesfully
+   Child thread 13 closed succesfully
+   Child thread 14 closed succesfully
+   Child thread 15 closed succesfully
+   Child thread 16 closed succesfully
+   Child thread 17 closed succesfully
+   Child thread 18 closed succesfully
+   Child thread 19 closed succesfully
+   Child thread 20 closed succesfully
+   Child thread 21 closed succesfully
+   Child thread 22 closed succesfully
+   Child thread 23 closed succesfully
+   Child thread 24 closed succesfully
+   Child thread 25 closed succesfully
+   Child thread 26 closed succesfully
+   Child thread 27 closed succesfully
+   Child thread 28 closed succesfully
+   Child thread 29 closed succesfully
+   Child thread 30 closed succesfully
+   Child thread 31 closed succesfully
+   Child thread 32 closed succesfully
+   Child thread 33 closed succesfully
+   Child thread 34 closed succesfully
+   Child thread 35 closed succesfully
+   Child thread 36 closed succesfully
+   Child thread 37 closed succesfully
+   Child thread 38 closed succesfully
+   Child thread 39 closed succesfully
+   Child thread 40 closed succesfully
+   Child thread 41 closed succesfully
+   Child thread 42 closed succesfully
+   Child thread 43 closed succesfully
+   Child thread 44 closed succesfully
+   Child thread 45 closed succesfully
+   Child thread 46 closed succesfully
+   Child thread 47 closed succesfully
+   Child thread 48 closed succesfully
+   Child thread 49 closed succesfully
+   Child thread 50 closed succesfully
+   Child thread 51 closed succesfully
+   Child thread 52 closed succesfully
+   Child thread 53 closed succesfully
+   Child thread 54 closed succesfully
+   Child thread 55 closed succesfully
+   Child thread 56 closed succesfully
+   Child thread 57 closed succesfully
+   Child thread 58 closed succesfully
+   Child thread 59 closed succesfully
+   Child thread 60 closed succesfully
+   Child thread 61 closed succesfully
+   Child thread 62 closed succesfully
+   Child thread 63 closed succesfully
+   Child thread 64 closed succesfully
+   Child thread 65 closed succesfully
+   Child thread 66 closed succesfully
+   Child thread 67 closed succesfully
+   Child thread 68 closed succesfully
+   Child thread 69 closed succesfully
+   Child thread 70 closed succesfully
+   Child thread 71 closed succesfully
+   Child thread 72 closed succesfully
+   Child thread 73 closed succesfully
+   Child thread 74 closed succesfully
+   Child thread 75 closed succesfully
+   Child thread 76 closed succesfully
+   Child thread 77 closed succesfully
+   Child thread 78 closed succesfully
+   Child thread 79 closed succesfully
+   Child thread 80 closed succesfully
+   Child thread 81 closed succesfully
+   Child thread 82 closed succesfully
+   Child thread 83 closed succesfully
+   Child thread 84 closed succesfully
+   Child thread 85 closed succesfully
+   Child thread 86 closed succesfully
+   Child thread 87 closed succesfully
+   Child thread 88 closed succesfully
+   Child thread 89 closed succesfully
+   Child thread 90 closed succesfully
+   Child thread 91 closed succesfully
+   Child thread 92 closed succesfully
+   Child thread 93 closed succesfully
+   Child thread 94 closed succesfully
+   Child thread 95 closed succesfully
+   Child thread 96 closed succesfully
+   Child thread 97 closed succesfully
+   Child thread 98 closed succesfully
+   Child thread 99 closed succesfully
+   Child thread 100 closed succesfully
+All child threads closed
+Parent Summary of square calls:
+   Thread 1: 1325 square calls
+   Thread 2: 1325 square calls
+   Thread 3: 1325 square calls
+   Thread 4: 1325 square calls
+   Thread 5: 1325 square calls
+   Thread 6: 1325 square calls
+   Thread 7: 1325 square calls
+   Thread 8: 1325 square calls
+   Thread 9: 1325 square calls
+   Thread 10: 1325 square calls
+   Thread 11: 1325 square calls
+   Thread 12: 1325 square calls
+   Thread 13: 1325 square calls
+   Thread 14: 1325 square calls
+   Thread 15: 1325 square calls
+   Thread 16: 1325 square calls
+   Thread 17: 1325 square calls
+   Thread 18: 1325 square calls
+   Thread 19: 1325 square calls
+   Thread 20: 1325 square calls
+   Thread 21: 1325 square calls
+   Thread 22: 1325 square calls
+   Thread 23: 1325 square calls
+   Thread 24: 1325 square calls
+   Thread 25: 1325 square calls
+   Thread 26: 1325 square calls
+   Thread 27: 1325 square calls
+   Thread 28: 1325 square calls
+   Thread 29: 1325 square calls
+   Thread 30: 1325 square calls
+   Thread 31: 1325 square calls
+   Thread 32: 1325 square calls
+   Thread 33: 1325 square calls
+   Thread 34: 1325 square calls
+   Thread 35: 1325 square calls
+   Thread 36: 1325 square calls
+   Thread 37: 1325 square calls
+   Thread 38: 1325 square calls
+   Thread 39: 1325 square calls
+   Thread 40: 1325 square calls
+   Thread 41: 1325 square calls
+   Thread 42: 1325 square calls
+   Thread 43: 1325 square calls
+   Thread 44: 1325 square calls
+   Thread 45: 1325 square calls
+   Thread 46: 1325 square calls
+   Thread 47: 1325 square calls
+   Thread 48: 1325 square calls
+   Thread 49: 1325 square calls
+   Thread 50: 1325 square calls
+   Thread 51: 1325 square calls
+   Thread 52: 1325 square calls
+   Thread 53: 1325 square calls
+   Thread 54: 1325 square calls
+   Thread 55: 1325 square calls
+   Thread 56: 1325 square calls
+   Thread 57: 1325 square calls
+   Thread 58: 1325 square calls
+   Thread 59: 1325 square calls
+   Thread 60: 1325 square calls
+   Thread 61: 1325 square calls
+   Thread 62: 1325 square calls
+   Thread 63: 1325 square calls
+   Thread 64: 1325 square calls
+   Thread 65: 1325 square calls
+   Thread 66: 1325 square calls
+   Thread 67: 1325 square calls
+   Thread 68: 1325 square calls
+   Thread 69: 1325 square calls
+   Thread 70: 1325 square calls
+   Thread 71: 1325 square calls
+   Thread 72: 1325 square calls
+   Thread 73: 1325 square calls
+   Thread 74: 1325 square calls
+   Thread 75: 1325 square calls
+   Thread 76: 1325 square calls
+   Thread 77: 1325 square calls
+   Thread 78: 1325 square calls
+   Thread 79: 1325 square calls
+   Thread 80: 1325 square calls
+   Thread 81: 1325 square calls
+   Thread 82: 1325 square calls
+   Thread 83: 1325 square calls
+   Thread 84: 1325 square calls
+   Thread 85: 1325 square calls
+   Thread 86: 1325 square calls
+   Thread 87: 1325 square calls
+   Thread 88: 1325 square calls
+   Thread 89: 1325 square calls
+   Thread 90: 1325 square calls
+   Thread 91: 1325 square calls
+   Thread 92: 1325 square calls
+   Thread 93: 1325 square calls
+   Thread 94: 1325 square calls
+   Thread 95: 1325 square calls
+   Thread 96: 1325 square calls
+   Thread 97: 1325 square calls
+   Thread 98: 1325 square calls
+   Thread 99: 1325 square calls
+   Thread 100: 1325 square calls
+Parent thread completed in 5005.43 ms (5.01 seconds)
+Parent thread closed
+
+=== PROGRAM SUMMARY ===
+   Total program elepsed times: 6000.14 ms (6.00 seconds)
+
+-----------------------------------------
+Error: partA3 execution failed for input 10 2 10000
+-----------------------------------------
+Error: Number of threads must be between 1 and 1000
+Error: partA3 execution failed for input 0 5 10
+-----------------------------------------
+Error: Deadline must be between 1 and 120 seconds
+Error: partA3 execution failed for input 4 0 10
+-----------------------------------------
+Error: Size must be between 1 and 10000
+Error: partA3 execution failed for input 4 5 0
+-----------------------------------------
+Error: Number of threads must be between 1 and 1000
+Error: partA3 execution failed for input 0 0 0
+-----------------------------------------
+Inputs received...
+  Number of Threads: 20
+  Deadline (seconds): 8
+  Size for Square(): 25
+
+Parent thread created successfully
+   Parent thread started creating children
+   Child thread 1 created successfully
+      Thread 1: starting now
+   Child thread 2 created successfully
+      Thread 2: starting now
+   Child thread 3 created successfully
+      Thread 3: starting now
+   Child thread 4 created successfully
+      Thread 4: starting now
+   Child thread 5 created successfully
+      Thread 5: starting now
+   Child thread 6 created successfully
+      Thread 6: starting now
+   Child thread 7 created successfully
+      Thread 7: starting now
+   Child thread 8 created successfully
+   Child thread 9 created successfully
+      Thread 8: starting now
+      Thread 9: starting now
+   Child thread 10 created successfully
+      Thread 10: starting now
+   Child thread 11 created successfully
+      Thread 11: starting now
+   Child thread 12 created successfully
+      Thread 12: starting now
+   Child thread 13 created successfully
+      Thread 13: starting now
+   Child thread 14 created successfully
+      Thread 14: starting now
+   Child thread 15 created successfully
+   Child thread 16 created successfully
+      Thread 15: starting now
+      Thread 16: starting now
+   Child thread 17 created successfully
+      Thread 17: starting now
+   Child thread 18 created successfully
+      Thread 18: starting now
+   Child thread 19 created successfully
+      Thread 19: starting now
+   Child thread 20 created successfully
+   Parent sleeping for 8 seconds
+      Thread 20: starting now
+      Thread 1 completed, elapsed time: 1000.09 ms, square calls = 350
+      Thread 2 completed, elapsed time: 1000.09 ms, square calls = 350
+      Thread 3 completed, elapsed time: 1000.09 ms, square calls = 350
+      Thread 4 completed, elapsed time: 1000.08 ms, square calls = 350
+      Thread 5 completed, elapsed time: 1000.08 ms, square calls = 350
+      Thread 6 completed, elapsed time: 1000.08 ms, square calls = 350
+      Thread 7 completed, elapsed time: 1000.08 ms, square calls = 350
+      Thread 8 completed, elapsed time: 1000.08 ms, square calls = 350
+      Thread 10 completed, elapsed time: 1000.04 ms, square calls = 350
+      Thread 9 completed, elapsed time: 1000.08 ms, square calls = 350
+      Thread 11 completed, elapsed time: 1000.08 ms, square calls = 350
+      Thread 12 completed, elapsed time: 1000.08 ms, square calls = 350
+      Thread 13 completed, elapsed time: 1000.06 ms, square calls = 350
+      Thread 14 completed, elapsed time: 1000.07 ms, square calls = 350
+      Thread 15 completed, elapsed time: 1000.07 ms, square calls = 350
+      Thread 16 completed, elapsed time: 1000.06 ms, square calls = 350
+      Thread 17 completed, elapsed time: 1000.06 ms, square calls = 350
+      Thread 18 completed, elapsed time: 1000.07 ms, square calls = 350
+      Thread 19 completed, elapsed time: 1000.07 ms, square calls = 350
+      Thread 20 completed, elapsed time: 1000.07 ms, square calls = 350
+   Child thread 1 closed succesfully
+   Child thread 2 closed succesfully
+   Child thread 3 closed succesfully
+   Child thread 4 closed succesfully
+   Child thread 5 closed succesfully
+   Child thread 6 closed succesfully
+   Child thread 7 closed succesfully
+   Child thread 8 closed succesfully
+   Child thread 9 closed succesfully
+   Child thread 10 closed succesfully
+   Child thread 11 closed succesfully
+   Child thread 12 closed succesfully
+   Child thread 13 closed succesfully
+   Child thread 14 closed succesfully
+   Child thread 15 closed succesfully
+   Child thread 16 closed succesfully
+   Child thread 17 closed succesfully
+   Child thread 18 closed succesfully
+   Child thread 19 closed succesfully
+   Child thread 20 closed succesfully
+All child threads closed
+Parent Summary of square calls:
+   Thread 1: 350 square calls
+   Thread 2: 350 square calls
+   Thread 3: 350 square calls
+   Thread 4: 350 square calls
+   Thread 5: 350 square calls
+   Thread 6: 350 square calls
+   Thread 7: 350 square calls
+   Thread 8: 350 square calls
+   Thread 9: 350 square calls
+   Thread 10: 350 square calls
+   Thread 11: 350 square calls
+   Thread 12: 350 square calls
+   Thread 13: 350 square calls
+   Thread 14: 350 square calls
+   Thread 15: 350 square calls
+   Thread 16: 350 square calls
+   Thread 17: 350 square calls
+   Thread 18: 350 square calls
+   Thread 19: 350 square calls
+   Thread 20: 350 square calls
+Parent thread completed in 8000.74 ms (8.00 seconds)
+Parent thread closed
+
+=== PROGRAM SUMMARY ===
+   Total program elepsed times: 9000.14 ms (9.00 seconds)
+
+-----------------------------------------
+Inputs received...
+  Number of Threads: 6
+  Deadline (seconds): 4
+  Size for Square(): 12
+
+Parent thread created successfully
+   Parent thread started creating children
+   Child thread 1 created successfully
+      Thread 1: starting now
+   Child thread 2 created successfully
+      Thread 2: starting now
+   Child thread 3 created successfully
+      Thread 3: starting now
+   Child thread 4 created successfully
+      Thread 4: starting now
+   Child thread 5 created successfully
+      Thread 5: starting now
+   Child thread 6 created successfully
+   Parent sleeping for 4 seconds
+      Thread 6: starting now
+      Thread 1 completed, elapsed time: 1000.07 ms, square calls = 90
+      Thread 2 completed, elapsed time: 1000.08 ms, square calls = 90
+      Thread 3 completed, elapsed time: 1000.08 ms, square calls = 90
+      Thread 4 completed, elapsed time: 1000.08 ms, square calls = 90
+      Thread 5 completed, elapsed time: 1000.08 ms, square calls = 90
+      Thread 6 completed, elapsed time: 1000.08 ms, square calls = 90
+   Child thread 1 closed succesfully
+   Child thread 2 closed succesfully
+   Child thread 3 closed succesfully
+   Child thread 4 closed succesfully
+   Child thread 5 closed succesfully
+   Child thread 6 closed succesfully
+All child threads closed
+Parent Summary of square calls:
+   Thread 1: 90 square calls
+   Thread 2: 90 square calls
+   Thread 3: 90 square calls
+   Thread 4: 90 square calls
+   Thread 5: 90 square calls
+   Thread 6: 90 square calls
+Parent thread completed in 4000.56 ms (4.00 seconds)
+Parent thread closed
+
+=== PROGRAM SUMMARY ===
+   Total program elepsed times: 5000.14 ms (5.00 seconds)
+
+-----------------------------------------
+
+Choose input method:
+1) Enter input manually from keyboard
+2) Read input from a file
+3) Exit
+
+Exiting...
+Building partA3...
+gcc -c -g -std=gnu90 -Wall -pedantic 	 -I. 								 -DBUILD_PARTA3 partA3.c -o partA3.o
+gcc -c -g -std=gnu90 -Wall -pedantic 	 -I. 								 -DBUILD_PARTA3 square.c -o square3.o
+Detected OS: Linux
+building partA3 with POSIX threads...
+gcc partA3.o square3.o -o partA3
+Running partA3...
+-----------------------------------------
+
+
+Choose input method:
+1) Enter input manually from keyboard
+2) Read input from a file
+3) Exit
+
+Enter input (format: threads deadline size), Ctrl+D to finish:
+
+Choose input method:
+1) Enter input manually from keyboard
+2) Read input from a file
+3) Exit
+Building partA3...
+gcc -c -g -std=gnu90 -Wall -pedantic 	 -I. 								 -DBUILD_PARTA3 partA3.c -o partA3.o
+gcc -c -g -std=gnu90 -Wall -pedantic 	 -I. 								 -DBUILD_PARTA3 square.c -o square3.o
+Detected OS: Linux
+building partA3 with POSIX threads...
+gcc partA3.o square3.o -o partA3
+Running partA3...
+-----------------------------------------
+
+
+Choose input method:
+1) Enter input manually from keyboard
+2) Read input from a file
+3) Exit
+
+
+
+Inputs received...
+  Number of Threads: 4
+  Deadline (seconds): 5
+  Size for Square(): 10
+
+Parent thread created successfully
+   Parent thread started creating children
+   Child thread 1 created successfully
+      Thread 1: starting now
+   Child thread 2 created successfully
+      Thread 2: starting now
+   Child thread 3 created successfully
+      Thread 3: starting now
+   Child thread 4 created successfully
+   Parent sleeping for 5 seconds
+      Thread 4: starting now
+      Thread 1 completed, elapsed time: 1000.08 ms, square calls = 65
+      Thread 2 completed, elapsed time: 1000.08 ms, square calls = 65
+      Thread 3 completed, elapsed time: 1000.07 ms, square calls = 65
+      Thread 4 completed, elapsed time: 1000.07 ms, square calls = 65
+   Child thread 1 closed succesfully
+   Child thread 2 closed succesfully
+   Child thread 3 closed succesfully
+   Child thread 4 closed succesfully
+All child threads closed
+Parent Summary of square calls:
+   Thread 1: 65 square calls
+   Thread 2: 65 square calls
+   Thread 3: 65 square calls
+   Thread 4: 65 square calls
+Parent thread completed in 5000.42 ms (5.00 seconds)
+Parent thread closed
+
+=== PROGRAM SUMMARY ===
+   Total program elepsed times: 6000.14 ms (6.00 seconds)
+
+-----------------------------------------
+Inputs received...
+  Number of Threads: 1
+  Deadline (seconds): 1
+  Size for Square(): 1
+
+Parent thread created successfully
+   Parent thread started creating children
+   Child thread 1 created successfully
+   Parent sleeping for 1 seconds
+      Thread 1: starting now
+   Child thread 1 closed succesfully
+All child threads closed
+Parent Summary of square calls:
+   Thread 1: 0 square calls
+Parent thread completed in 1000.24 ms (1.00 seconds)
+   Thread 1 stopped at Square(1)
+      Thread 1 completed, elapsed time: 1000.08 ms, square calls = 254774208
+Parent thread closed
+
+=== PROGRAM SUMMARY ===
+   Total program elepsed times: 2000.14 ms (2.00 seconds)
+
+-----------------------------------------
+Inputs received...
+  Number of Threads: 100
+  Deadline (seconds): 5
+  Size for Square(): 50
+
+Parent thread created successfully
+   Parent thread started creating children
+   Child thread 1 created successfully
+      Thread 1: starting now
+   Child thread 2 created successfully
+      Thread 2: starting now
+   Child thread 3 created successfully
+      Thread 3: starting now
+   Child thread 4 created successfully
+      Thread 4: starting now
+   Child thread 5 created successfully
+      Thread 5: starting now
+   Child thread 6 created successfully
+      Thread 6: starting now
+   Child thread 7 created successfully
+      Thread 7: starting now
+   Child thread 8 created successfully
+      Thread 8: starting now
+   Child thread 9 created successfully
+      Thread 9: starting now
+   Child thread 10 created successfully
+      Thread 10: starting now
+   Child thread 11 created successfully
+      Thread 11: starting now
+   Child thread 12 created successfully
+      Thread 12: starting now
+   Child thread 13 created successfully
+      Thread 13: starting now
+   Child thread 14 created successfully
+      Thread 14: starting now
+   Child thread 15 created successfully
+      Thread 15: starting now
+   Child thread 16 created successfully
+      Thread 16: starting now
+   Child thread 17 created successfully
+      Thread 17: starting now
+   Child thread 18 created successfully
+      Thread 18: starting now
+   Child thread 19 created successfully
+      Thread 19: starting now
+   Child thread 20 created successfully
+      Thread 20: starting now
+   Child thread 21 created successfully
+      Thread 21: starting now
+   Child thread 22 created successfully
+      Thread 22: starting now
+   Child thread 23 created successfully
+      Thread 23: starting now
+   Child thread 24 created successfully
+      Thread 24: starting now
+   Child thread 25 created successfully
+      Thread 25: starting now
+   Child thread 26 created successfully
+      Thread 26: starting now
+   Child thread 27 created successfully
+      Thread 27: starting now
+   Child thread 28 created successfully
+      Thread 28: starting now
+   Child thread 29 created successfully
+      Thread 29: starting now
+   Child thread 30 created successfully
+      Thread 30: starting now
+   Child thread 31 created successfully
+      Thread 31: starting now
+   Child thread 32 created successfully
+      Thread 32: starting now
+   Child thread 33 created successfully
+      Thread 33: starting now
+   Child thread 34 created successfully
+      Thread 34: starting now
+   Child thread 35 created successfully
+      Thread 35: starting now
+   Child thread 36 created successfully
+      Thread 36: starting now
+   Child thread 37 created successfully
+      Thread 37: starting now
+   Child thread 38 created successfully
+      Thread 38: starting now
+   Child thread 39 created successfully
+      Thread 39: starting now
+   Child thread 40 created successfully
+      Thread 40: starting now
+   Child thread 41 created successfully
+      Thread 41: starting now
+   Child thread 42 created successfully
+      Thread 42: starting now
+   Child thread 43 created successfully
+      Thread 43: starting now
+   Child thread 44 created successfully
+      Thread 44: starting now
+   Child thread 45 created successfully
+      Thread 45: starting now
+   Child thread 46 created successfully
+      Thread 46: starting now
+   Child thread 47 created successfully
+      Thread 47: starting now
+   Child thread 48 created successfully
+      Thread 48: starting now
+   Child thread 49 created successfully
+      Thread 49: starting now
+   Child thread 50 created successfully
+      Thread 50: starting now
+   Child thread 51 created successfully
+      Thread 51: starting now
+   Child thread 52 created successfully
+      Thread 52: starting now
+   Child thread 53 created successfully
+      Thread 53: starting now
+   Child thread 54 created successfully
+      Thread 54: starting now
+   Child thread 55 created successfully
+      Thread 55: starting now
+   Child thread 56 created successfully
+      Thread 56: starting now
+   Child thread 57 created successfully
+      Thread 57: starting now
+   Child thread 58 created successfully
+      Thread 58: starting now
+   Child thread 59 created successfully
+      Thread 59: starting now
+   Child thread 60 created successfully
+      Thread 60: starting now
+   Child thread 61 created successfully
+      Thread 61: starting now
+   Child thread 62 created successfully
+      Thread 62: starting now
+   Child thread 63 created successfully
+      Thread 63: starting now
+   Child thread 64 created successfully
+      Thread 64: starting now
+   Child thread 65 created successfully
+      Thread 65: starting now
+   Child thread 66 created successfully
+      Thread 66: starting now
+   Child thread 67 created successfully
+      Thread 67: starting now
+   Child thread 68 created successfully
+      Thread 68: starting now
+   Child thread 69 created successfully
+      Thread 69: starting now
+   Child thread 70 created successfully
+      Thread 70: starting now
+   Child thread 71 created successfully
+      Thread 71: starting now
+   Child thread 72 created successfully
+      Thread 72: starting now
+   Child thread 73 created successfully
+      Thread 73: starting now
+   Child thread 74 created successfully
+      Thread 74: starting now
+   Child thread 75 created successfully
+      Thread 75: starting now
+   Child thread 76 created successfully
+      Thread 76: starting now
+   Child thread 77 created successfully
+      Thread 77: starting now
+   Child thread 78 created successfully
+      Thread 78: starting now
+   Child thread 79 created successfully
+      Thread 79: starting now
+   Child thread 80 created successfully
+      Thread 80: starting now
+   Child thread 81 created successfully
+      Thread 81: starting now
+   Child thread 82 created successfully
+      Thread 82: starting now
+   Child thread 83 created successfully
+      Thread 83: starting now
+   Child thread 84 created successfully
+      Thread 84: starting now
+   Child thread 85 created successfully
+      Thread 85: starting now
+   Child thread 86 created successfully
+      Thread 86: starting now
+   Child thread 87 created successfully
+      Thread 87: starting now
+   Child thread 88 created successfully
+      Thread 88: starting now
+   Child thread 89 created successfully
+      Thread 89: starting now
+   Child thread 90 created successfully
+      Thread 90: starting now
+   Child thread 91 created successfully
+      Thread 91: starting now
+   Child thread 92 created successfully
+      Thread 92: starting now
+   Child thread 93 created successfully
+      Thread 93: starting now
+   Child thread 94 created successfully
+      Thread 94: starting now
+   Child thread 95 created successfully
+      Thread 95: starting now
+   Child thread 96 created successfully
+      Thread 96: starting now
+   Child thread 97 created successfully
+      Thread 97: starting now
+   Child thread 98 created successfully
+      Thread 98: starting now
+   Child thread 99 created successfully
+      Thread 99: starting now
+   Child thread 100 created successfully
+   Parent sleeping for 5 seconds
+      Thread 100: starting now
+      Thread 1 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 2 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 3 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 4 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 5 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 6 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 7 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 8 completed, elapsed time: 1000.11 ms, square calls = 1325
+      Thread 9 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 10 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 11 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 12 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 13 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 14 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 15 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 16 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 17 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 18 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 19 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 20 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 21 completed, elapsed time: 1000.06 ms, square calls = 1325
+      Thread 22 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 23 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 24 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 25 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 26 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 27 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 28 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 29 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 30 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 31 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 32 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 33 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 34 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 35 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 36 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 37 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 38 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 39 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 40 completed, elapsed time: 1000.03 ms, square calls = 1325
+      Thread 41 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 42 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 43 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 44 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 45 completed, elapsed time: 1000.05 ms, square calls = 1325
+      Thread 46 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 47 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 48 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 49 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 50 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 51 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 52 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 53 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 54 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 55 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 56 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 57 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 58 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 59 completed, elapsed time: 1000.05 ms, square calls = 1325
+      Thread 60 completed, elapsed time: 1000.09 ms, square calls = 1325
+      Thread 61 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 62 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 63 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 64 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 65 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 66 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 67 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 68 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 69 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 70 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 71 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 72 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 73 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 74 completed, elapsed time: 1000.05 ms, square calls = 1325
+      Thread 75 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 76 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 77 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 78 completed, elapsed time: 1000.06 ms, square calls = 1325
+      Thread 79 completed, elapsed time: 1000.11 ms, square calls = 1325
+      Thread 80 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 81 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 82 completed, elapsed time: 1000.05 ms, square calls = 1325
+      Thread 83 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 84 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 85 completed, elapsed time: 1000.04 ms, square calls = 1325
+      Thread 86 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 87 completed, elapsed time: 1000.05 ms, square calls = 1325
+      Thread 88 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 89 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 90 completed, elapsed time: 1000.10 ms, square calls = 1325
+      Thread 91 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 92 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 93 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 94 completed, elapsed time: 1000.06 ms, square calls = 1325
+      Thread 95 completed, elapsed time: 1000.08 ms, square calls = 1325
+      Thread 96 completed, elapsed time: 1000.06 ms, square calls = 1325
+      Thread 97 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 98 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 99 completed, elapsed time: 1000.07 ms, square calls = 1325
+      Thread 100 completed, elapsed time: 1000.07 ms, square calls = 1325
+   Child thread 1 closed succesfully
+   Child thread 2 closed succesfully
+   Child thread 3 closed succesfully
+   Child thread 4 closed succesfully
+   Child thread 5 closed succesfully
+   Child thread 6 closed succesfully
+   Child thread 7 closed succesfully
+   Child thread 8 closed succesfully
+   Child thread 9 closed succesfully
+   Child thread 10 closed succesfully
+   Child thread 11 closed succesfully
+   Child thread 12 closed succesfully
+   Child thread 13 closed succesfully
+   Child thread 14 closed succesfully
+   Child thread 15 closed succesfully
+   Child thread 16 closed succesfully
+   Child thread 17 closed succesfully
+   Child thread 18 closed succesfully
+   Child thread 19 closed succesfully
+   Child thread 20 closed succesfully
+   Child thread 21 closed succesfully
+   Child thread 22 closed succesfully
+   Child thread 23 closed succesfully
+   Child thread 24 closed succesfully
+   Child thread 25 closed succesfully
+   Child thread 26 closed succesfully
+   Child thread 27 closed succesfully
+   Child thread 28 closed succesfully
+   Child thread 29 closed succesfully
+   Child thread 30 closed succesfully
+   Child thread 31 closed succesfully
+   Child thread 32 closed succesfully
+   Child thread 33 closed succesfully
+   Child thread 34 closed succesfully
+   Child thread 35 closed succesfully
+   Child thread 36 closed succesfully
+   Child thread 37 closed succesfully
+   Child thread 38 closed succesfully
+   Child thread 39 closed succesfully
+   Child thread 40 closed succesfully
+   Child thread 41 closed succesfully
+   Child thread 42 closed succesfully
+   Child thread 43 closed succesfully
+   Child thread 44 closed succesfully
+   Child thread 45 closed succesfully
+   Child thread 46 closed succesfully
+   Child thread 47 closed succesfully
+   Child thread 48 closed succesfully
+   Child thread 49 closed succesfully
+   Child thread 50 closed succesfully
+   Child thread 51 closed succesfully
+   Child thread 52 closed succesfully
+   Child thread 53 closed succesfully
+   Child thread 54 closed succesfully
+   Child thread 55 closed succesfully
+   Child thread 56 closed succesfully
+   Child thread 57 closed succesfully
+   Child thread 58 closed succesfully
+   Child thread 59 closed succesfully
+   Child thread 60 closed succesfully
+   Child thread 61 closed succesfully
+   Child thread 62 closed succesfully
+   Child thread 63 closed succesfully
+   Child thread 64 closed succesfully
+   Child thread 65 closed succesfully
+   Child thread 66 closed succesfully
+   Child thread 67 closed succesfully
+   Child thread 68 closed succesfully
+   Child thread 69 closed succesfully
+   Child thread 70 closed succesfully
+   Child thread 71 closed succesfully
+   Child thread 72 closed succesfully
+   Child thread 73 closed succesfully
+   Child thread 74 closed succesfully
+   Child thread 75 closed succesfully
+   Child thread 76 closed succesfully
+   Child thread 77 closed succesfully
+   Child thread 78 closed succesfully
+   Child thread 79 closed succesfully
+   Child thread 80 closed succesfully
+   Child thread 81 closed succesfully
+   Child thread 82 closed succesfully
+   Child thread 83 closed succesfully
+   Child thread 84 closed succesfully
+   Child thread 85 closed succesfully
+   Child thread 86 closed succesfully
+   Child thread 87 closed succesfully
+   Child thread 88 closed succesfully
+   Child thread 89 closed succesfully
+   Child thread 90 closed succesfully
+   Child thread 91 closed succesfully
+   Child thread 92 closed succesfully
+   Child thread 93 closed succesfully
+   Child thread 94 closed succesfully
+   Child thread 95 closed succesfully
+   Child thread 96 closed succesfully
+   Child thread 97 closed succesfully
+   Child thread 98 closed succesfully
+   Child thread 99 closed succesfully
+   Child thread 100 closed succesfully
+All child threads closed
+Parent Summary of square calls:
+   Thread 1: 1325 square calls
+   Thread 2: 1325 square calls
+   Thread 3: 1325 square calls
+   Thread 4: 1325 square calls
+   Thread 5: 1325 square calls
+   Thread 6: 1325 square calls
+   Thread 7: 1325 square calls
+   Thread 8: 1325 square calls
+   Thread 9: 1325 square calls
+   Thread 10: 1325 square calls
+   Thread 11: 1325 square calls
+   Thread 12: 1325 square calls
+   Thread 13: 1325 square calls
+   Thread 14: 1325 square calls
+   Thread 15: 1325 square calls
+   Thread 16: 1325 square calls
+   Thread 17: 1325 square calls
+   Thread 18: 1325 square calls
+   Thread 19: 1325 square calls
+   Thread 20: 1325 square calls
+   Thread 21: 1325 square calls
+   Thread 22: 1325 square calls
+   Thread 23: 1325 square calls
+   Thread 24: 1325 square calls
+   Thread 25: 1325 square calls
+   Thread 26: 1325 square calls
+   Thread 27: 1325 square calls
+   Thread 28: 1325 square calls
+   Thread 29: 1325 square calls
+   Thread 30: 1325 square calls
+   Thread 31: 1325 square calls
+   Thread 32: 1325 square calls
+   Thread 33: 1325 square calls
+   Thread 34: 1325 square calls
+   Thread 35: 1325 square calls
+   Thread 36: 1325 square calls
+   Thread 37: 1325 square calls
+   Thread 38: 1325 square calls
+   Thread 39: 1325 square calls
+   Thread 40: 1325 square calls
+   Thread 41: 1325 square calls
+   Thread 42: 1325 square calls
+   Thread 43: 1325 square calls
+   Thread 44: 1325 square calls
+   Thread 45: 1325 square calls
+   Thread 46: 1325 square calls
+   Thread 47: 1325 square calls
+   Thread 48: 1325 square calls
+   Thread 49: 1325 square calls
+   Thread 50: 1325 square calls
+   Thread 51: 1325 square calls
+   Thread 52: 1325 square calls
+   Thread 53: 1325 square calls
+   Thread 54: 1325 square calls
+   Thread 55: 1325 square calls
+   Thread 56: 1325 square calls
+   Thread 57: 1325 square calls
+   Thread 58: 1325 square calls
+   Thread 59: 1325 square calls
+   Thread 60: 1325 square calls
+   Thread 61: 1325 square calls
+   Thread 62: 1325 square calls
+   Thread 63: 1325 square calls
+   Thread 64: 1325 square calls
+   Thread 65: 1325 square calls
+   Thread 66: 1325 square calls
+   Thread 67: 1325 square calls
+   Thread 68: 1325 square calls
+   Thread 69: 1325 square calls
+   Thread 70: 1325 square calls
+   Thread 71: 1325 square calls
+   Thread 72: 1325 square calls
+   Thread 73: 1325 square calls
+   Thread 74: 1325 square calls
+   Thread 75: 1325 square calls
+   Thread 76: 1325 square calls
+   Thread 77: 1325 square calls
+   Thread 78: 1325 square calls
+   Thread 79: 1325 square calls
+   Thread 80: 1325 square calls
+   Thread 81: 1325 square calls
+   Thread 82: 1325 square calls
+   Thread 83: 1325 square calls
+   Thread 84: 1325 square calls
+   Thread 85: 1325 square calls
+   Thread 86: 1325 square calls
+   Thread 87: 1325 square calls
+   Thread 88: 1325 square calls
+   Thread 89: 1325 square calls
+   Thread 90: 1325 square calls
+   Thread 91: 1325 square calls
+   Thread 92: 1325 square calls
+   Thread 93: 1325 square calls
+   Thread 94: 1325 square calls
+   Thread 95: 1325 square calls
+   Thread 96: 1325 square calls
+   Thread 97: 1325 square calls
+   Thread 98: 1325 square calls
+   Thread 99: 1325 square calls
+   Thread 100: 1325 square calls
+Parent thread completed in 5006.18 ms (5.01 seconds)
+Parent thread closed
+
+=== PROGRAM SUMMARY ===
+   Total program elepsed times: 6000.14 ms (6.00 seconds)
+
+-----------------------------------------
+Error: partA3 execution failed for input 10 2 10000
+-----------------------------------------
+Error: All arguments must be positive integers greater than 0.
+
+Invalid input in file: 0 5 10. Skipping...
+
+Error: All arguments must be positive integers greater than 0.
+
+Invalid input in file: 4 0 10. Skipping...
+
+Error: All arguments must be positive integers greater than 0.
+
+Invalid input in file: 4 5 0. Skipping...
+
+Error: All arguments must be positive integers greater than 0.
+
+Invalid input in file: 0 0 0. Skipping...
+
+Inputs received...
+  Number of Threads: 20
+  Deadline (seconds): 8
+  Size for Square(): 25
+
+Parent thread created successfully
+   Parent thread started creating children
+   Child thread 1 created successfully
+      Thread 1: starting now
+   Child thread 2 created successfully
+      Thread 2: starting now
+   Child thread 3 created successfully
+      Thread 3: starting now
+   Child thread 4 created successfully
+      Thread 4: starting now
+   Child thread 5 created successfully
+      Thread 5: starting now
+   Child thread 6 created successfully
+      Thread 6: starting now
+   Child thread 7 created successfully
+      Thread 7: starting now
+   Child thread 8 created successfully
+      Thread 8: starting now
+   Child thread 9 created successfully
+      Thread 9: starting now
+   Child thread 10 created successfully
+      Thread 10: starting now
+   Child thread 11 created successfully
+      Thread 11: starting now
+   Child thread 12 created successfully
+      Thread 12: starting now
+   Child thread 13 created successfully
+      Thread 13: starting now
+   Child thread 14 created successfully
+      Thread 14: starting now
+   Child thread 15 created successfully
+      Thread 15: starting now
+   Child thread 16 created successfully
+      Thread 16: starting now
+   Child thread 17 created successfully
+   Child thread 18 created successfully
+      Thread 17: starting now
+      Thread 18: starting now
+   Child thread 19 created successfully
+      Thread 19: starting now
+   Child thread 20 created successfully
+   Parent sleeping for 8 seconds
+      Thread 20: starting now
+      Thread 1 completed, elapsed time: 1000.09 ms, square calls = 350
+      Thread 2 completed, elapsed time: 1000.05 ms, square calls = 350
+      Thread 3 completed, elapsed time: 1000.08 ms, square calls = 350
+      Thread 4 completed, elapsed time: 1000.05 ms, square calls = 350
+      Thread 5 completed, elapsed time: 1000.04 ms, square calls = 350
+      Thread 6 completed, elapsed time: 1000.07 ms, square calls = 350
+      Thread 7 completed, elapsed time: 1000.04 ms, square calls = 350
+      Thread 8 completed, elapsed time: 1000.07 ms, square calls = 350
+      Thread 9 completed, elapsed time: 1000.04 ms, square calls = 350
+      Thread 10 completed, elapsed time: 1000.07 ms, square calls = 350
+      Thread 11 completed, elapsed time: 1000.04 ms, square calls = 350
+      Thread 13 completed, elapsed time: 1000.08 ms, square calls = 350
+      Thread 12 completed, elapsed time: 1000.09 ms, square calls = 350
+      Thread 15 completed, elapsed time: 1000.04 ms, square calls = 350
+      Thread 14 completed, elapsed time: 1000.08 ms, square calls = 350
+      Thread 16 completed, elapsed time: 1000.07 ms, square calls = 350
+      Thread 18 completed, elapsed time: 1000.07 ms, square calls = 350
+      Thread 17 completed, elapsed time: 1000.09 ms, square calls = 350
+      Thread 19 completed, elapsed time: 1000.04 ms, square calls = 350
+      Thread 20 completed, elapsed time: 1000.07 ms, square calls = 350
+   Child thread 1 closed succesfully
+   Child thread 2 closed succesfully
+   Child thread 3 closed succesfully
+   Child thread 4 closed succesfully
+   Child thread 5 closed succesfully
+   Child thread 6 closed succesfully
+   Child thread 7 closed succesfully
+   Child thread 8 closed succesfully
+   Child thread 9 closed succesfully
+   Child thread 10 closed succesfully
+   Child thread 11 closed succesfully
+   Child thread 12 closed succesfully
+   Child thread 13 closed succesfully
+   Child thread 14 closed succesfully
+   Child thread 15 closed succesfully
+   Child thread 16 closed succesfully
+   Child thread 17 closed succesfully
+   Child thread 18 closed succesfully
+   Child thread 19 closed succesfully
+   Child thread 20 closed succesfully
+All child threads closed
+Parent Summary of square calls:
+   Thread 1: 350 square calls
+   Thread 2: 350 square calls
+   Thread 3: 350 square calls
+   Thread 4: 350 square calls
+   Thread 5: 350 square calls
+   Thread 6: 350 square calls
+   Thread 7: 350 square calls
+   Thread 8: 350 square calls
+   Thread 9: 350 square calls
+   Thread 10: 350 square calls
+   Thread 11: 350 square calls
+   Thread 12: 350 square calls
+   Thread 13: 350 square calls
+   Thread 14: 350 square calls
+   Thread 15: 350 square calls
+   Thread 16: 350 square calls
+   Thread 17: 350 square calls
+   Thread 18: 350 square calls
+   Thread 19: 350 square calls
+   Thread 20: 350 square calls
+Parent thread completed in 8001.22 ms (8.00 seconds)
+Parent thread closed
+
+=== PROGRAM SUMMARY ===
+   Total program elepsed times: 9000.15 ms (9.00 seconds)
+
+-----------------------------------------
+Inputs received...
+  Number of Threads: 6
+  Deadline (seconds): 4
+  Size for Square(): 12
+
+Parent thread created successfully
+   Parent thread started creating children
+   Child thread 1 created successfully
+      Thread 1: starting now
+   Child thread 2 created successfully
+      Thread 2: starting now
+   Child thread 3 created successfully
+      Thread 3: starting now
+   Child thread 4 created successfully
+      Thread 4: starting now
+   Child thread 5 created successfully
+      Thread 5: starting now
+   Child thread 6 created successfully
+   Parent sleeping for 4 seconds
+      Thread 6: starting now
+      Thread 1 completed, elapsed time: 1000.08 ms, square calls = 90
+      Thread 2 completed, elapsed time: 1000.08 ms, square calls = 90
+      Thread 3 completed, elapsed time: 1000.08 ms, square calls = 90
+      Thread 4 completed, elapsed time: 1000.10 ms, square calls = 90
+      Thread 5 completed, elapsed time: 1000.08 ms, square calls = 90
+      Thread 6 completed, elapsed time: 1000.07 ms, square calls = 90
+   Child thread 1 closed succesfully
+   Child thread 2 closed succesfully
+   Child thread 3 closed succesfully
+   Child thread 4 closed succesfully
+   Child thread 5 closed succesfully
+   Child thread 6 closed succesfully
+All child threads closed
+Parent Summary of square calls:
+   Thread 1: 90 square calls
+   Thread 2: 90 square calls
+   Thread 3: 90 square calls
+   Thread 4: 90 square calls
+   Thread 5: 90 square calls
+   Thread 6: 90 square calls
+Parent thread completed in 4000.64 ms (4.00 seconds)
+Parent thread closed
+
+=== PROGRAM SUMMARY ===
+   Total program elepsed times: 5000.14 ms (5.00 seconds)
+
+-----------------------------------------
+
+Choose input method:
+1) Enter input manually from keyboard
+2) Read input from a file
+3) Exit
+
+Exiting...

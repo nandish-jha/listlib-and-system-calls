@@ -1,0 +1,86 @@
+CMPT 332 Grading Scheme Fall 2025
+Assignment 1 - Phase 2
+
+Names: AAKASH JANA, NANDISH JHA
+NSIDs: AAJ284, NAJ474
+Student Numbers: 11297343, 11282001
+Group ID:01
+
+TOTAL:  13/20 marks
+
+
+PART A: Children and Parent Threads    4/9 marks
+
+PARTA::: Design Doc:  1/2 marks  
+    
+    (-1) Detailed error handling,  for example when too many threads are
+    requested, memory allocation failure, define the data structure, threading
+    model
+
+
+PARTA::: Implementation: 2/5 marks
+
+
+	Windows:  	1/3 
+        Exited with error
+	UBC:		0.5/1  
+	POSIX:		0.5/1
+
+
+PARTA:::: Testing/Test Plan:	1/2 marks 
+    
+    (-0.5) Test for threadsID, elapse time, 
+    input valiadtion
+    (-0.5) boundary limits
+
+
+PART B::::: Bash script     0/0 marks 
+
+    - Ensure that the loop continue until EOF
+    - Clear error messgaes for incorrect args
+
+
+PART C:::::: List/Tree	7.5/9 marks
+
+One mark was reduced from you because you did not give the correct permission
+for us to grade and I had to spend extra time to fix it.
+
+
+PART C:::::::Design Doc:  1.5/2 marks
+
+Your desing is fine and shows that you guys are on right track but I am 
+expecting pseudocode with a good docstring.
+       
+PART C:::::::: Skeleton/Stubs/Insert functions: 3/3 marks
+
+Good skeleton and very nicely done!
+
+PART C:::::::Test Plan:	     2/2 marks
+
+Test plan is very detailed and you guys are on right track!
+
+
+PART C::::::Test Program/Results:	     2/2 marks
+
+The test program and output result is good and is on right track!
+
+
+General:   
+
+Makefile  0.5/1 mark
+	The makefile should be capable of making every target on the platform at the
+	same time. If it can't that's an issue with the way you are building. You
+	don't want to have to remake everything every time you want to run a
+	differnt app. Talk to a TA if you were having issues.
+
+	Why do your list targets depend on header.h? Isn't that for a different part
+	of the assignment?
+
+	The way you are handling flags is a bit strange, multiple instances of -I. 
+	Ideally, youd want CPPFLAGS and CFLAGS to be two separate things. CFLAGS are
+	used in both linking and compiling, while CPPFLAGS are only used when
+	compiling.
+
+
+Git Log:  1/1 mark
+
