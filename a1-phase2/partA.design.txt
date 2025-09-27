@@ -1,0 +1,90 @@
+Nandish Jha NAJ474 11282001
+Aakash Jana AAJ284 11297343
+
+=======================
+Part A Design Document
+=======================
+
+Overview:
+---------
+Part A involves implementing multi-threaded and multi-process programs to
+compute the square of numbers using a recursive algorithm. The implementation
+spans multiple subparts:
+
+- **Part A.1**: Windows multi-threaded program using Win32 API.
+- **Part A.2**: Linux multi-threaded program using UBC pthreads.
+- **Part A.3**: Linux multi-threaded program using POSIX threads.
+- **Part A.4 (Bonus)**: Linux multi-process program using UNIX processes and
+  signals.
+
+Key Components:
+---------------
+1. **Thread/Process Creation & Management**:
+   - **Part A.1**: Uses `CreateThread()` for thread creation.
+   - **Part A.2 & A.3**: Uses `pthread_create()` for thread creation.
+   - **Part A.4**: Uses `fork()` to create child processes.
+
+2. **Thread/Process Functionality**:
+   - Each thread/process executes the `Square()` function independently.
+   - **Part A.1, A.2, A.3**: Threads terminate based on a global flag or parent
+     intervention.
+   - **Part A.4**: Processes terminate upon receiving a `SIGALRM` signal.
+
+3. **Recursive Square Algorithm**:
+   - `Square(n) = Square(n-1) + n + n - 1`, with base case `Square(0) = 0`.
+   - Implemented in `square.c` for reuse across all subparts.
+
+4. **Synchronization & Timing**:
+   - **Part A.1, A.2, A.3**: Threads are synchronized using global flags or
+     parent intervention.
+   - **Part A.4**: Processes are synchronized using signals (`SIGALRM`).
+
+5. **Error Handling**:
+   - Comprehensive error checking for thread/process creation.
+   - Proper resource cleanup on errors.
+   - Informative error messages for debugging.
+
+Files Architecture:
+-------------------
+- **partA1.c**: Windows thread management logic.
+- **partA2.c**: UBC pthreads implementation.
+- **partA3.c**: POSIX threads implementation.
+- **partA4.c**: UNIX processes implementation with signals.
+- **header.h**: Unified header with function declarations, data structures,
+  and includes.
+- **square.c**: Recursive `Square()` function implementation.
+
+Compilation Requirements:
+-------------------------
+- **Part A.1**: Windows Threading API compatibility.
+- **Part A.2, A.3, A.4**: Linux threading and process APIs.
+- Unified Makefile for OS-specific compilation with appropriate flags.
+- Code follows 80-character line length limit.
+- Error-free compilation with `-Wall -pedantic` flags.
+
+Phase 2 Updates:
+----------------
+- **Part A.1**: Fully functional with thread creation and termination.
+- **Part A.2 & A.3**: Dummy programs compile successfully, with threads calling
+  `Square()` once.
+- **Part A.4**: Prototype implementation with process creation and signal
+  handling.
+- Test plans and results documented in `PartA.testplan.txt` and
+  `PartA.testresults.txt`.
+
+Design Decision:
+----------------
+In Part A, we decided not to use a struct to manage thread-related data. This
+decision was made for the following reasons:
+
+1. **Simplicity**: The program's requirements are straightforward, and managing
+  individual variables reduces complexity.
+2. **Flexibility**: Each variable can be managed independently, which is useful
+  given their different lifetimes and scopes.
+3. **Thread-Local Storage**: Using `__declspec(thread)` for thread-local
+  variables is simpler and more efficient for this implementation.
+4. **Legacy Compatibility**: The existing codebase and dependencies are
+  designed to work with individual variables, avoiding the need for significant
+  refactoring.
+
+This approach ensures clarity and aligns with the program's design goals.
